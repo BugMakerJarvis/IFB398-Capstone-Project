@@ -12,7 +12,6 @@ body {
 }
 
 header {
-    background-color: #fff;
     padding: 20px 10px;
     display: flex;
     flex-direction: row
@@ -128,12 +127,12 @@ nav ul li a:hover {
 .hero {
     min-height: 1800px;
     text-align: center;
-    background: url("../public/img/bg.png") no-repeat fixed center;
+    /* background: url("../public/img/bg.png") no-repeat fixed center; */
     background-size: 60%;
 }
 
 .hero__content {
-    color: #ffffff;
+    color: #000;
     padding-top: 25px;
 }
 

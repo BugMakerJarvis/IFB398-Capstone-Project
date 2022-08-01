@@ -57,7 +57,7 @@ export default function SignInSide() {
       <Grid container component="main" sx={{ height: '80vh' }}>
         <CssBaseline />
         <Grid
-        component={Paper}
+          component={Paper}
           item
           xs={false}
           sm={4}
@@ -132,17 +132,17 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            <Typography mb={1} component="body1" variant="body1">
+            <Typography mb={1} component="p" variant="p">
               You can also sign in with:
             </Typography>
             <Avatar alt="Google" src="img/Google.png" onClick={signInWithGoogle} />
 
-            <Link href="#" variant="body2"
+            <Link href="#" variant="p"
               mt={2} underline="hover" color="black" fontWeight="bold" >
               Forgot password?
             </Link>
 
-            <Link href="/signup" variant="body2"
+            <Link href="/signup" variant="p"
               underline="hover" color="black" fontWeight="bold">
               {"Don't have an account? Sign Up"}
             </Link>

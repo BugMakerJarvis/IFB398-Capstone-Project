@@ -5,7 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("//e4s-lyc-web/public/img/logo.png");
+  background: url("../public/img/bg.png") no-repeat fixed center;
+  background-size: 50%;
 }
 
 code {
