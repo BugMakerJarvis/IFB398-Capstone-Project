@@ -51,10 +51,14 @@ export default function Navigation() {
               </DropdownMenu>
             </UncontrolledDropdown>
             <NavItem>
-                <NavLink href="/">Contact</NavLink>
-              </NavItem>
+              <NavLink href="/">Contact</NavLink>
+            </NavItem>
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
+          <Nav className="me-auto" navbar>
+            <NavItem>
+              <NavLink href="/signin">Sign in</NavLink>
+            </NavItem>
+          </Nav>
         </Collapse>
       </Navbar>
     </div>
