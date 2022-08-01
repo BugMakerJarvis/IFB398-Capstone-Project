@@ -1,6 +1,8 @@
 import {
     getAuth,
     createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile,
     GoogleAuthProvider,
     FacebookAuthProvider,
     signInWithPopup,
@@ -86,6 +88,22 @@ export async function register(email, password) {
             // Signed in
             const user = userCredential.user;
             // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+        });
+}
+
+export async function signIn(email, password) {
+    signInWithEmailAndPassword(getAuth(), email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            // ...
+            console.log(user)
+            return user;
         })
         .catch((error) => {
             const errorCode = error.code;
