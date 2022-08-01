@@ -10,37 +10,35 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {register, updateUserProfile} from "../services/auth";
 
 function Copyright(props) {
     return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://elements4success.com.au/">
-          E4S
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://elements4success.com.au/">
+                E4S
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
     );
-  }
+}
 
 const theme = createTheme();
 
-export default function SignInSide() {
-    const handleSubmit = (event) => {
+export default function SignUpSide() {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        await register(data.get('email'), data.get('password'));
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{ height: '80vh' }}>
-                <CssBaseline />
+            <Grid container component="main" sx={{height: '80vh'}}>
+                <CssBaseline/>
                 <Grid item xs={12} sm={8} md={4} ml={30} component={Paper} elevation={6} square>
                     <Box
                         sx={{
@@ -55,7 +53,7 @@ export default function SignInSide() {
                         <Typography component="h1" variant="h4">
                             Create Account
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -101,7 +99,7 @@ export default function SignInSide() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControlLabel
-                                        control={<Checkbox value="allowExtraEmails" />}
+                                        control={<Checkbox value="allowExtraEmails"/>}
                                         label="I want to receive inspiration and updates via email."
                                     />
                                 </Grid>
@@ -112,14 +110,14 @@ export default function SignInSide() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 4, mb: 2 }}
+                                sx={{mt: 4, mb: 2}}
                             >
                                 Sign Up
                             </Button>
                             <Grid container justifyContent="center" mt={2}>
                                 <Grid item>
                                     <Link href="/signin" variant="body2"
-                                        underline="hover" color="black" fontWeight="bold">
+                                          underline="hover" color="black" fontWeight="bold">
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>
@@ -135,7 +133,7 @@ export default function SignInSide() {
                     md={4.5}
                     sx={{
                         // backgroundImage: 'url(https://source.unsplash.com/random)',
-                        backgroundImage:'url(img/IMG20210510162140.jpg)',
+                        backgroundImage: 'url(img/IMG20210510162140.jpg)',
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
