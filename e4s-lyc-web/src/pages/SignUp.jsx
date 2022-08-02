@@ -10,8 +10,8 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {register, updateUserProfile} from "../services/auth";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { register, updateUserProfile } from "../services/auth";
 
 function Copyright(props) {
     return (
@@ -37,12 +37,12 @@ export default function SignUpSide() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{height: '80vh'}}>
-                <CssBaseline/>
+            <Grid container component="main" sx={{ height: '80vh' }}>
+                <CssBaseline />
                 <Grid item xs={12} sm={8} md={4} ml={30} component={Paper} elevation={6} square>
                     <Box
                         sx={{
-                            my: 12,
+                            my: 8,
                             mx: 8,
                             color: "#52BD66",
                             display: 'flex',
@@ -50,13 +50,14 @@ export default function SignUpSide() {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography component="h1" variant="h4">
+                        <Typography mb={4} component="h1" variant="h4">
                             Create Account
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
+                                        color="success"
                                         autoComplete="given-name"
                                         name="firstName"
                                         required
@@ -68,6 +69,7 @@ export default function SignUpSide() {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
+                                        color="success"
                                         required
                                         fullWidth
                                         id="lastName"
@@ -78,6 +80,7 @@ export default function SignUpSide() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        color="success"
                                         required
                                         fullWidth
                                         id="email"
@@ -88,6 +91,7 @@ export default function SignUpSide() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        color="success"
                                         required
                                         fullWidth
                                         name="password"
@@ -99,7 +103,7 @@ export default function SignUpSide() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControlLabel
-                                        control={<Checkbox value="allowExtraEmails"/>}
+                                        control={<Checkbox value="allowExtraEmails" color="success" />}
                                         label="I want to receive inspiration and updates via email."
                                     />
                                 </Grid>
@@ -110,14 +114,13 @@ export default function SignUpSide() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{mt: 4, mb: 2}}
+                                sx={{ mt: 4, mb: 2 }}
                             >
                                 Sign Up
                             </Button>
                             <Grid container justifyContent="center" mt={2}>
                                 <Grid item>
-                                    <Link href="/signin" variant="body2"
-                                          underline="hover" color="black" fontWeight="bold">
+                                    <Link href="/signin" color="inherit" fontWeight="bold">
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>

@@ -10,9 +10,9 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {signInWithGoogle, signInWithFacebook, signIn, isUserSignedIn} from '../services/auth'
-import {useEffect, useState} from "react";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { signInWithGoogle, signInWithFacebook, signIn, isUserSignedIn } from '../services/auth'
+import { useEffect, useState } from "react";
 
 function Copyright(props) {
     return (
@@ -56,8 +56,8 @@ export default function SignInSide() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{height: '80vh'}}>
-                <CssBaseline/>
+            <Grid container component="main" sx={{ height: '80vh' }}>
+                <CssBaseline />
                 <Grid
                     component={Paper}
                     item
@@ -78,7 +78,7 @@ export default function SignInSide() {
                 <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
                     <Box
                         sx={{
-                            my: 12,
+                            my: 8,
                             mx: 8,
                             color: "#52BD66",
                             display: 'flex',
@@ -86,12 +86,13 @@ export default function SignInSide() {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography mb={2} component="h1" variant="h4">
+                        <Typography mb={4} component="h1" variant="h4">
                             Sign In to Your Account
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
+                                color="success"
                                 required
                                 fullWidth
                                 id="email"
@@ -102,6 +103,7 @@ export default function SignInSide() {
                             />
                             <TextField
                                 margin="normal"
+                                color="success"
                                 required
                                 fullWidth
                                 name="password"
@@ -111,7 +113,7 @@ export default function SignInSide() {
                                 autoComplete="current-password"
                             />
                             <FormControlLabel
-                                control={<Checkbox value="remember" color="primary"/>}
+                                control={<Checkbox value="remember" color="success" />}
                                 label="Remember me"
                             />
                             <Button
@@ -120,7 +122,7 @@ export default function SignInSide() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{mt: 3}}
+                                sx={{ mt: 3 }}
                             >
                                 Sign In
                             </Button>
@@ -137,19 +139,27 @@ export default function SignInSide() {
                         <Typography mb={1} component="p" variant="p">
                             You can also sign in with:
                         </Typography>
-                        <Avatar alt="Google" src="img/Google.png" onClick={signInWithGoogle}/>
+                        <Button>
+                            <Avatar alt="Google" src="img/Google.png" onClick={signInWithGoogle} />
+                        </Button>
 
-                        <Link href="#" variant="p"
-                              mt={2} underline="hover" color="black" fontWeight="bold">
-                            Forgot password?
-                        </Link>
-
-                        <Link href="/signup" variant="p"
-                              underline="hover" color="black" fontWeight="bold">
-                            {"Don't have an account? Sign Up"}
-                        </Link>
+                        <Box
+                            sx={{
+                                color: "#52BD66",
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Link href="#" color="inherit" fontWeight="bold">
+                                Forgot password?
+                            </Link>
+                            <Link href="/signup" color="inherit" fontWeight="bold">
+                                Don't have an account? Sign Up
+                            </Link>
+                        </Box>
                     </Box>
-                    <Copyright sx={{mt: 5}}/>
+                    <Copyright sx={{ mt: 5 }} />
                 </Grid>
             </Grid>
         </ThemeProvider>
