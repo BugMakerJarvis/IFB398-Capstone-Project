@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import './App.css';
 import './style.css'
 import firebase from "firebase/compat/app";
@@ -9,35 +9,26 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import {useState} from "react";
 
 
 function App() {
+
+    const [currentUserName, setCurrentUserName] = useState(localStorage.getItem("currentUserEmail"));
+
     return (
         <BrowserRouter>
-          <div className="App">
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-            </Routes>
-            <Footer />
-          </div>
+            <div className="App">
+                <Header currentUserName={currentUserName} onChange={(name) => setCurrentUserName(name)}/>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/signin" element={<SignIn onChange={(name) => setCurrentUserName(name)}/>}/>
+                    <Route path="/signup" element={<SignUp onChange={(name) => setCurrentUserName(name)}/>}/>
+                </Routes>
+                <Footer/>
+            </div>
         </BrowserRouter>
-      );
-//   return <Button variant="contained">hello Jarvis</Button> ;
+    );
 }
-
-// function App() {
-//     const firebaseApp = firebase.apps[0];
-//     return (
-//         <div>
-//             <h1>React & Firebase</h1>
-//             <code>
-//                 <pre>{JSON.stringify(firebaseApp.options, null, 2)}</pre>
-//             </code>
-//         </div>
-//     );
-// }
 
 export default App;

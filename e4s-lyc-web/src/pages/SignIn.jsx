@@ -10,9 +10,9 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signInWithGoogle, signInWithFacebook, signIn, isUserSignedIn } from '../services/auth'
-import { useEffect, useState } from "react";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {signInWithGoogle, signInWithFacebook, signIn, isUserSignedIn} from '../services/auth'
+import {useNavigate} from "react-router";
 
 function Copyright(props) {
     return (
@@ -43,21 +43,29 @@ const theme = createTheme({
     },
 });
 
-export default function SignInSide() {
+export default function SignInSide(props) {
+    const {onChange} = props;
 
-    const [currentUserFirstName, setCurrentUserFirstName] = useState();
+    const navigate = useNavigate();
+
+    function pushToHome() {
+        navigate('/')
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const res = await signIn(data.get('email'), data.get('password'));
-        console.log(res);
+        await signIn(data.get('email'), data.get('password'))
+            .then(() => {
+                onChange(localStorage.getItem("currentUserEmail"));
+            })
+            .then(() => pushToHome());
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{ height: '80vh' }}>
-                <CssBaseline />
+            <Grid container component="main" sx={{height: '80vh'}}>
+                <CssBaseline/>
                 <Grid
                     component={Paper}
                     item
@@ -89,7 +97,7 @@ export default function SignInSide() {
                         <Typography mb={4} component="h1" variant="h4">
                             Sign In to Your Account
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
                             <TextField
                                 margin="normal"
                                 color="success"
@@ -113,7 +121,7 @@ export default function SignInSide() {
                                 autoComplete="current-password"
                             />
                             <FormControlLabel
-                                control={<Checkbox value="remember" color="success" />}
+                                control={<Checkbox value="remember" color="success"/>}
                                 label="Remember me"
                             />
                             <Button
@@ -122,7 +130,7 @@ export default function SignInSide() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3 }}
+                                sx={{mt: 3}}
                             >
                                 Sign In
                             </Button>
@@ -140,9 +148,10 @@ export default function SignInSide() {
                             You can also sign in with:
                         </Typography>
                         <Button>
-                            <Avatar alt="Google" src="img/Google.png" onClick={signInWithGoogle} />
+                            <Avatar alt="Google" src="img/Google.png" onClick={async () => {
+                                await signInWithGoogle().then(() => onChange(localStorage.getItem("currentUserEmail"))).then(() => pushToHome());
+                            }}/>
                         </Button>
-
                         <Box
                             sx={{
                                 color: "#52BD66",
@@ -159,7 +168,7 @@ export default function SignInSide() {
                             </Link>
                         </Box>
                     </Box>
-                    <Copyright sx={{ mt: 5 }} />
+                    <Copyright sx={{mt: 5}}/>
                 </Grid>
             </Grid>
         </ThemeProvider>

@@ -1,8 +1,10 @@
 import {
     getAuth,
+    setPersistence,
+    browserSessionPersistence,
+    inMemoryPersistence,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    updateProfile,
     GoogleAuthProvider,
     FacebookAuthProvider,
     signInWithPopup,
@@ -11,24 +13,19 @@ import {
 
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(getAuth(), provider)
-        .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            // The signed-in user info.
-            const user = result.user;
-            // ...
-        }).catch((error) => {
+
+    await setPersistence(getAuth(), inMemoryPersistence)
+        .then(() => {
+            // In memory persistence will be applied to the signed in Google user
+            // even though the persistence was set to 'none' and a page redirect
+            // occurred.
+            const provider = new GoogleAuthProvider();
+            return signInWithPopup(getAuth(), provider);
+        })
+        .catch((error) => {
             // Handle Errors here.
             const errorCode = error.code;
             const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
         });
 }
 
@@ -57,14 +54,11 @@ export async function signInWithFacebook() {
 
             // ...
         });
-    ;
 }
 
 export function signOutUser() {
     // Sign out of Firebase.
-    signOut(getAuth())
-        .then(() => console.log("Sign-out successful."))
-        .catch((error) => console.log("Sign-out failed.", error));
+    return signOut(getAuth());
 }
 
 // Returns the signed-in user's profile Pic URL.
@@ -83,31 +77,27 @@ export function isUserSignedIn() {
 }
 
 export async function register(email, password) {
-    createUserWithEmailAndPassword(getAuth(), email, password)
+    await createUserWithEmailAndPassword(getAuth(), email, password)
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
             // ...
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
         });
 }
 
 export async function signIn(email, password) {
-    signInWithEmailAndPassword(getAuth(), email, password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
+    await setPersistence(getAuth(), browserSessionPersistence)
+        .then(() => {
+            // Existing and future Auth states are now persisted in the current
+            // session only. Closing the window would clear any existing state even
+            // if a user forgets to sign out.
             // ...
-            console.log(user)
-            return user;
+            // New sign-in will be persisted with session persistence.
+            return signInWithEmailAndPassword(getAuth(), email, password);
         })
         .catch((error) => {
+            // Handle Errors here.
             const errorCode = error.code;
             const errorMessage = error.message;
-            // ..
         });
 }

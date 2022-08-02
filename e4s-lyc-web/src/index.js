@@ -7,8 +7,15 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 import firebase from "firebase/compat/app";
 import {getFirebaseConfig} from "./config/firebase-config";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 firebase.initializeApp(getFirebaseConfig());
+onAuthStateChanged(getAuth(), function (user) {
+    if (user) {
+        localStorage.setItem("currentUserEmail", user.email);
+        localStorage.setItem("currentUserName", user.displayName);
+    }
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
