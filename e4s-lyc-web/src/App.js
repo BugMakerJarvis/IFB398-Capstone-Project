@@ -9,7 +9,9 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import SettingsPage from "./pages/SettingsPage";
 import {useState} from "react";
+import Settings from "@mui/icons-material/Settings";
 
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
                     <Route path="/" element={<Home/>}/>
                     <Route path="/signin" element={<SignIn onChange={(name) => setCurrentUserName(name)}/>}/>
                     <Route path="/signup" element={<SignUp onChange={(name) => setCurrentUserName(name)}/>}/>
+                    <Route path="/settingspage" element={<SettingsPage/>}/>
                 </Routes>
                 <Footer/>
             </div>
