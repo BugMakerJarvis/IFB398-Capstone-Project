@@ -14,6 +14,7 @@ onAuthStateChanged(getAuth(), function (user) {
     if (user) {
         localStorage.setItem("currentUserEmail", user.email);
         localStorage.setItem("currentUserName", user.displayName);
+        console.log(user)
     }
 });
 

@@ -1,6 +1,8 @@
 import {
     getAuth,
     setPersistence,
+    updateProfile,
+    sendEmailVerification,
     browserSessionPersistence,
     inMemoryPersistence,
     createUserWithEmailAndPassword,
@@ -76,13 +78,19 @@ export function isUserSignedIn() {
     return !!getAuth().currentUser;
 }
 
-export async function register(email, password) {
-    await createUserWithEmailAndPassword(getAuth(), email, password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            // ...
-        });
+export async function register(email, password, firstName, lastName) {
+    const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+    await updateProfile(getAuth().currentUser, {
+        displayName: `${firstName} ${lastName}`
+    }).then(() => {
+        // Profile updated!
+        console.log("Profile updated!");
+    }).catch((error) => {
+        // An error occurred
+        console.log("An error occurred when updating profile!", error);
+    });
+    await sendEmailVerification(userCredential.user);
+    return userCredential;
 }
 
 export async function signIn(email, password) {
@@ -94,10 +102,5 @@ export async function signIn(email, password) {
             // ...
             // New sign-in will be persisted with session persistence.
             return signInWithEmailAndPassword(getAuth(), email, password);
-        })
-        .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
         });
 }

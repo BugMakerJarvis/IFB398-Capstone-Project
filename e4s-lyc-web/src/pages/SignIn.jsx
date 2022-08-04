@@ -3,16 +3,17 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signInWithGoogle, signInWithFacebook, signIn, isUserSignedIn } from '../services/auth'
-import { useNavigate } from "react-router";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {signInWithGoogle, signIn} from '../services/auth'
+import {useNavigate} from "react-router";
+import {Alert, Collapse, IconButton} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import {useState} from "react";
 
 function Copyright(props) {
     return (
@@ -30,17 +31,17 @@ function Copyright(props) {
 const theme = createTheme({
     components: {
         MuiLink: {
-          styleOverrides: {
-            root: {
-              textDecoration: "none",
-              ":hover": {
-                textDecoration: "underline",
-                color:"#52BD66"
-              },
+            styleOverrides: {
+                root: {
+                    textDecoration: "none",
+                    ":hover": {
+                        textDecoration: "underline",
+                        color: "#52BD66"
+                    },
+                },
             },
-          },
         },
-      },
+    },
     palette: {
         primary: {
             main: '#52BD66',
@@ -53,7 +54,7 @@ const theme = createTheme({
 });
 
 export default function SignInSide(props) {
-    const { onChange } = props;
+    const {onChange} = props;
 
     const navigate = useNavigate();
 
@@ -61,20 +62,28 @@ export default function SignInSide(props) {
         navigate('/')
     }
 
+    const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         await signIn(data.get('email'), data.get('password'))
             .then(() => {
-                onChange(localStorage.getItem("currentUserEmail"));
+                onChange(localStorage.getItem("currentUserName"));
             })
-            .then(() => pushToHome());
+            .then(() => pushToHome())
+            .catch((error) => {
+                    setErrorMessage(error.message.substring(10));
+                    setErrorAlertOpen(true);
+                }
+            );
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{ height: '80vh' }}>
-                <CssBaseline />
+            <Grid container component="main" sx={{height: '80vh'}}>
+                <CssBaseline/>
                 <Grid
                     component={Paper}
                     item
@@ -105,7 +114,25 @@ export default function SignInSide(props) {
                         <Typography color="primary" mb={4} component="h1" variant="h4">
                             Sign In to Your Account
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Collapse in={errorAlertOpen}>
+                            <Alert severity="error" sx={{mb: 2}}
+                                   action={
+                                       <IconButton
+                                           aria-label="close"
+                                           color="inherit"
+                                           size="small"
+                                           onClick={() => {
+                                               setErrorAlertOpen(false);
+                                           }}
+                                       >
+                                           <CloseIcon fontSize="inherit"/>
+                                       </IconButton>
+                                   }
+                            >
+                                {errorMessage}
+                            </Alert>
+                        </Collapse>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
                             <TextField
                                 margin="normal"
                                 color="primary"
@@ -134,7 +161,7 @@ export default function SignInSide(props) {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 4 }}
+                                sx={{mt: 4}}
                             >
                                 Sign In
                             </Button>
@@ -152,8 +179,8 @@ export default function SignInSide(props) {
                         </Typography>
                         <Button>
                             <Avatar alt="Google" src="img/Google.png" onClick={async () => {
-                                await signInWithGoogle().then(() => onChange(localStorage.getItem("currentUserEmail"))).then(() => pushToHome());
-                            }} />
+                                await signInWithGoogle().then(() => onChange(localStorage.getItem("currentUserName"))).then(() => pushToHome());
+                            }}/>
                         </Button>
                         <Box
                             sx={{
@@ -170,7 +197,7 @@ export default function SignInSide(props) {
                             </Link>
                         </Box>
                     </Box>
-                    <Copyright sx={{ mt: 5 }} />
+                    <Copyright sx={{mt: 5}}/>
                 </Grid>
             </Grid>
         </ThemeProvider>

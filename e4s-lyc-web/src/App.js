@@ -16,7 +16,7 @@ import Settings from "@mui/icons-material/Settings";
 
 function App() {
 
-    const [currentUserName, setCurrentUserName] = useState(localStorage.getItem("currentUserEmail"));
+    const [currentUserName, setCurrentUserName] = useState(localStorage.getItem("currentUserName"));
 
     return (
         <BrowserRouter>

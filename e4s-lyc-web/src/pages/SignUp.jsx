@@ -9,10 +9,34 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { isUserSignedIn, register, updateUserProfile } from "../services/auth";
-import { useNavigate } from "react-router";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {register} from "../services/auth";
+import {useNavigate} from "react-router";
+import {
+    Alert,
+    Collapse,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import {useState} from "react";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    limit,
+    onSnapshot,
+    setDoc,
+    updateDoc,
+    doc,
+    serverTimestamp,
+} from 'firebase/firestore';
 
 function Copyright(props) {
     return (
@@ -53,7 +77,7 @@ const theme = createTheme({
 });
 
 export default function SignUpSide(props) {
-    const { onChange } = props;
+    const {onChange} = props;
 
     const navigate = useNavigate();
 
@@ -61,24 +85,51 @@ export default function SignUpSide(props) {
         navigate('/')
     }
 
+    const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
+    const [verificationMessage, setVerificationMessage] = useState("");
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        try {
-            await register(data.get('email'), data.get('password'))
-                .then(() => {
-                    onChange(localStorage.getItem("currentUserEmail"));
+        const email = data.get("email");
+        const password = data.get("password");
+        const firstName = data.get("firstName");
+        const lastName = data.get("lastName");
+        if (data.get("firstName") === "" || data.get("lastName") === "") {
+            setErrorMessage("Error (auth/name-required).");
+            setErrorAlertOpen(true);
+        } else {
+            await register(email, password, firstName, lastName)
+                .then(async (userCredential) => {
+                    await addDoc(collection(getFirestore(), 'userProfile'), {
+                        uid: userCredential.user.uid,
+                        displayName: userCredential.user.displayName,
+                        receiveEmail: data.get("receiveEmail") === "on",
+                        timestamp: serverTimestamp()
+                    });
                 })
-                .then(() => pushToHome());
-        } catch (e) {
-            console.log(e);
+                .then(() => {
+                    setVerificationMessage(`We've sent an email to ${email}, you can verify your email address now.`);
+                    setVerificationDialogOpen(true);
+                })
+                .then(() => {
+                    onChange(`${firstName} ${lastName}`);
+                })
+                .catch((error) => {
+                        setErrorMessage(error.message);
+                        setErrorAlertOpen(true);
+                    }
+                );
         }
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{ height: '80vh' }}>
-                <CssBaseline />
+            <Grid container component="main" sx={{height: '80vh'}}>
+                <CssBaseline/>
                 <Grid item xs={12} sm={8} md={4} ml={30} component={Paper} elevation={6} square>
                     <Box
                         sx={{
@@ -92,7 +143,47 @@ export default function SignUpSide(props) {
                         <Typography color="primary" mb={4} component="h1" variant="h4">
                             Create Account
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Collapse in={errorAlertOpen}>
+                            <Alert severity="error" sx={{mb: 2}}
+                                   action={
+                                       <IconButton
+                                           aria-label="close"
+                                           color="inherit"
+                                           size="small"
+                                           onClick={() => {
+                                               setErrorAlertOpen(false);
+                                           }}
+                                       >
+                                           <CloseIcon fontSize="inherit"/>
+                                       </IconButton>
+                                   }
+                            >
+                                {errorMessage}
+                            </Alert>
+                        </Collapse>
+                        <Dialog
+                            open={verificationDialogOpen}
+                            onClose={() => setVerificationDialogOpen(false)}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Email Verification"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    {verificationMessage}
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => {
+                                    setVerificationDialogOpen(false);
+                                    // onChange(localStorage.getItem("currentUserName"));
+                                    pushToHome();
+                                }}>OK</Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -142,7 +233,7 @@ export default function SignUpSide(props) {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControlLabel
-                                        control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                        control={<Checkbox name="receiveEmail" color="primary"/>}
                                         label="I want to receive inspiration and updates via email."
                                     />
                                 </Grid>
@@ -153,7 +244,7 @@ export default function SignUpSide(props) {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 4, mb: 2 }}
+                                sx={{mt: 4, mb: 2}}
                             >
                                 Sign Up
                             </Button>
