@@ -5,7 +5,7 @@ Team Galaxy
 
 Sam
 
-Guz T_T
+Guz <3
 
 Stan
 
