@@ -13,8 +13,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
-import {createTheme, rgbToHex, ThemeProvider} from '@mui/material/styles';
-import {minHeight} from '@mui/system';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {useEffect} from "react";
+import {getAuth} from "firebase/auth";
+import Button from "@mui/material/Button";
+
 
 const theme = createTheme({
     components: {
@@ -132,39 +135,39 @@ export default function SettingsPage() {
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
-                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                    First Name
-                                </Typography>
-                                <Grid item xs={2} ml={3} mb={3}>
-                                    <TextField
-                                        color="primary"
-                                        autoComplete="given-name"
-                                        name="firstName"
-                                        required
-                                        fullWidth
-                                        id="firstName"
-                                        label="First Name"
-                                    />
-                                </Grid>
-                            </Grid>
+                            {/*<Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>*/}
+                            {/*    <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>*/}
+                            {/*        First Name*/}
+                            {/*    </Typography>*/}
+                            {/*    <Grid item xs={2} ml={3} mb={3}>*/}
+                            {/*        <TextField*/}
+                            {/*            disabled={true}*/}
+                            {/*            color="primary"*/}
+                            {/*            autoComplete="given-name"*/}
+                            {/*            name="firstName"*/}
+                            {/*            fullWidth*/}
+                            {/*            id="firstName"*/}
+                            {/*            label="First Name"*/}
+                            {/*        />*/}
+                            {/*    </Grid>*/}
+                            {/*</Grid>*/}
 
-                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
-                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                    Last Name
-                                </Typography>
-                                <Grid item xs={2} ml={3} mb={3}>
-                                    <TextField
-                                        color="primary"
-                                        required
-                                        fullWidth
-                                        id="lastName"
-                                        label="Last Name"
-                                        name="lastName"
-                                        autoComplete="family-name"
-                                    />
-                                </Grid>
-                            </Grid>
+                            {/*<Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>*/}
+                            {/*    <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>*/}
+                            {/*        Last Name*/}
+                            {/*    </Typography>*/}
+                            {/*    <Grid item xs={2} ml={3} mb={3}>*/}
+                            {/*        <TextField*/}
+                            {/*            disabled={true}*/}
+                            {/*            color="primary"*/}
+                            {/*            fullWidth*/}
+                            {/*            id="lastName"*/}
+                            {/*            label="Last Name"*/}
+                            {/*            name="lastName"*/}
+                            {/*            autoComplete="family-name"*/}
+                            {/*        />*/}
+                            {/*    </Grid>*/}
+                            {/*</Grid>*/}
 
                             <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
@@ -224,7 +227,7 @@ export default function SettingsPage() {
                                         name="email"
                                         fullWidth
                                         id="email"
-                                        label="123456789@gmail.com"
+                                        label={localStorage.getItem("currentUserEmail")}
                                     />
                                 </Grid>
                             </Grid>
@@ -232,41 +235,44 @@ export default function SettingsPage() {
                     </Grid>
 
                     {/* tab p2 security*/}
-                    <Grid container spacing={2} mt={5}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="primary" variant="h6" gutterBottom component="div">
-                                Security
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
-                                Keep your account safe and sound
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item sx={{
-                            height: 'auto',
-                            backgroundColor: "rgba(255,255,255,0.2)"
-                        }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
-                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                    Password
+                    {localStorage.getItem("emailVerified") === "true" && localStorage.getItem("providerId") === "password" ?
+                        <Grid container spacing={2} mt={5}>
+                            <Grid item xs={2}/>
+                            <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
+                                <Typography color="primary" variant="h6" gutterBottom component="div">
+                                    Security
                                 </Typography>
-                                <Grid item xs={4} ml={3} mb={3}>
-                                    <Link href="#" color="primary" fontWeight="bold">
-                                        Change password
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} style={{display: "flex", alignItems: "center"}}>
-                                    <Typography color="secondary" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                        Improve your security with a strong password.
+                            </Grid>
+                            <Grid item xs={2}/>
+                            <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
+                                <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
+                                    Keep your account safe and sound
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={2}/>
+                            <Grid item sx={{
+                                height: 'auto',
+                                backgroundColor: "rgba(255,255,255,0.2)"
+                            }} xs={8} component={Paper} elevation={20}>
+                                <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
+                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
+                                        Password
                                     </Typography>
+                                    <Grid item xs={4} ml={3} mb={3}>
+                                        <Link href="#" color="primary" fontWeight="bold">
+                                            Change password
+                                        </Link>
+                                    </Grid>
+                                    <Grid item xs={12} style={{display: "flex", alignItems: "center"}}>
+                                        <Typography color="secondary" fontWeight="bold" mb={3} variant="body1"
+                                                    gutterBottom>
+                                            Improve your security with a strong password.
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </Grid>
+                        </Grid> : null}
+
                 </TabPanel>
                 {/* tab3 */}
 

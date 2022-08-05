@@ -16,16 +16,16 @@ import Settings from "@mui/icons-material/Settings";
 
 function App() {
 
-    const [currentUserName, setCurrentUserName] = useState(localStorage.getItem("currentUserName"));
+    // const [currentUserName, setCurrentUserName] = useState(localStorage.getItem("currentUserName"));
 
     return (
         <BrowserRouter>
             <div className="App">
-                <Header currentUserName={currentUserName} onChange={(name) => setCurrentUserName(name)}/>
+                <Header/>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/signin" element={<SignIn onChange={(name) => setCurrentUserName(name)}/>}/>
-                    <Route path="/signup" element={<SignUp onChange={(name) => setCurrentUserName(name)}/>}/>
+                    <Route path="/signin" element={<SignIn/>}/>
+                    <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/settingspage" element={<SettingsPage/>}/>
                 </Routes>
                 <Footer/>

@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {Divider, IconButton, ListItemIcon, Menu, MenuItem} from "@mui/material";
 import {signOutUser} from "../services/auth";
+import {useNavigate} from "react-router";
 
 const theme = createTheme({
     components: {
@@ -53,7 +54,13 @@ const theme = createTheme({
 
 export default function Header(props) {
 
-    const {currentUserName, onChange} = props;
+    // const {currentUserName, onChange} = props;
+
+    const navigate = useNavigate();
+
+    function pushToHome() {
+        navigate('/')
+    }
 
     const signInRightContent = (
         <Grid item xs={4} mt={6}>
@@ -87,7 +94,7 @@ export default function Header(props) {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
             >
-                Hello! {currentUserName}
+                Hello! {localStorage.getItem("currentUserName")}
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -135,7 +142,7 @@ export default function Header(props) {
                 </Link>
                 <MenuItem onClick={() => signOutUser().then(() => {
                     localStorage.clear();
-                    onChange(null);
+                    pushToHome();
                 })}>
                     <ListItemIcon>
                         <Link>
@@ -180,7 +187,7 @@ export default function Header(props) {
                                 Welcome to 21 Day Lead Yourself Challenge!
                             </Typography>
                         </Grid>
-                        {(currentUserName !== undefined && currentUserName !== null && currentUserName !== "null" && currentUserName !== "") ? nameRightContent : signInRightContent}
+                        {localStorage.getItem("currentUserName") ? nameRightContent : signInRightContent}
                     </Grid>
                 </Box>
             </ThemeProvider>

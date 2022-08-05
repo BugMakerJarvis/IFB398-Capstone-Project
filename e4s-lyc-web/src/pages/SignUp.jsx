@@ -28,15 +28,9 @@ import {
     getFirestore,
     collection,
     addDoc,
-    query,
-    orderBy,
-    limit,
-    onSnapshot,
-    setDoc,
-    updateDoc,
-    doc,
     serverTimestamp,
 } from 'firebase/firestore';
+import {getAuth} from "firebase/auth";
 
 function Copyright(props) {
     return (
@@ -76,8 +70,7 @@ const theme = createTheme({
     },
 });
 
-export default function SignUpSide(props) {
-    const {onChange} = props;
+export default function SignUpSide() {
 
     const navigate = useNavigate();
 
@@ -106,17 +99,17 @@ export default function SignUpSide(props) {
                 .then(async (userCredential) => {
                     await addDoc(collection(getFirestore(), 'userProfile'), {
                         uid: userCredential.user.uid,
-                        displayName: userCredential.user.displayName,
+                        firstName: firstName,
+                        lastName: lastName,
                         receiveEmail: data.get("receiveEmail") === "on",
                         timestamp: serverTimestamp()
                     });
+                }).then(() => {
+                    localStorage.setItem("currentUserName", `${firstName} ${lastName}`)
                 })
                 .then(() => {
                     setVerificationMessage(`We've sent an email to ${email}, you can verify your email address now.`);
                     setVerificationDialogOpen(true);
-                })
-                .then(() => {
-                    onChange(`${firstName} ${lastName}`);
                 })
                 .catch((error) => {
                         setErrorMessage(error.message);
@@ -178,7 +171,6 @@ export default function SignUpSide(props) {
                             <DialogActions>
                                 <Button onClick={() => {
                                     setVerificationDialogOpen(false);
-                                    // onChange(localStorage.getItem("currentUserName"));
                                     pushToHome();
                                 }}>OK</Button>
                             </DialogActions>

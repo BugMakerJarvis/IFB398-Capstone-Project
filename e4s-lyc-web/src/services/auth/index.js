@@ -12,6 +12,7 @@ import {
     signInWithPopup,
     signOut,
 } from 'firebase/auth';
+import {collection, doc, getFirestore} from "firebase/firestore";
 
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.

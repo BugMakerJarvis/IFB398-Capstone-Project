@@ -54,7 +54,7 @@ const theme = createTheme({
 });
 
 export default function SignInSide(props) {
-    const {onChange} = props;
+    // const {onChange} = props;
 
     const navigate = useNavigate();
 
@@ -69,9 +69,9 @@ export default function SignInSide(props) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         await signIn(data.get('email'), data.get('password'))
-            .then(() => {
-                onChange(localStorage.getItem("currentUserName"));
-            })
+            // .then(() => {
+            //     onChange(localStorage.getItem("currentUserName"));
+            // })
             .then(() => pushToHome())
             .catch((error) => {
                     setErrorMessage(error.message.substring(10));
@@ -179,7 +179,9 @@ export default function SignInSide(props) {
                         </Typography>
                         <Button>
                             <Avatar alt="Google" src="img/Google.png" onClick={async () => {
-                                await signInWithGoogle().then(() => onChange(localStorage.getItem("currentUserName"))).then(() => pushToHome());
+                                await signInWithGoogle()
+                                    // .then(() => onChange(localStorage.getItem("currentUserName")))
+                                    .then(() => pushToHome());
                             }}/>
                         </Button>
                         <Box
