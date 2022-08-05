@@ -13,8 +13,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
-import { createTheme, rgbToHex, ThemeProvider } from '@mui/material/styles';
-import { minHeight } from '@mui/system';
+import {createTheme, rgbToHex, ThemeProvider} from '@mui/material/styles';
+import {minHeight} from '@mui/system';
 
 const theme = createTheme({
     components: {
@@ -45,7 +45,7 @@ const theme = createTheme({
 });
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const {children, value, index, ...other} = props;
 
     return (
         <div
@@ -56,7 +56,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box sx={{p: 3}}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -84,17 +84,17 @@ export default function SettingsPage() {
         setValue(newValue);
     };
 
-    const [pronou, setPronou] = React.useState('');
+    const [pronoun, setPronoun] = React.useState('');
 
-    const handlePronouChange = (event) => {
-        setPronou(event.target.value);
+    const handlePronounChange = (event) => {
+        setPronoun(event.target.value);
     };
 
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    const label = {inputProps: {'aria-label': 'Switch demo'}};
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{width: '100%'}}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
                     </Grid>
@@ -112,27 +112,27 @@ export default function SettingsPage() {
                     </Grid>
                 </Grid>
             </Box>
-            <Box sx={{ minHeight: "60vh" }} >
+            <Box sx={{minHeight: "60vh"}}>
                 <TabPanel value={value} index={0}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" gutterBottom component="div">
                                 Profile Settings
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
                                 Change identifying details for your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{ display: "flex", alignItems: "center" }} p={1}>
+                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                     First Name
                                 </Typography>
@@ -144,12 +144,12 @@ export default function SettingsPage() {
                                         required
                                         fullWidth
                                         id="firstName"
-                                        label="Zhi"
+                                        label="First Name"
                                     />
                                 </Grid>
                             </Grid>
 
-                            <Grid item xs={12} ml={2} style={{ display: "flex", alignItems: "center" }} p={1}>
+                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                     Last Name
                                 </Typography>
@@ -159,26 +159,26 @@ export default function SettingsPage() {
                                         required
                                         fullWidth
                                         id="lastName"
-                                        label="Gu"
+                                        label="Last Name"
                                         name="lastName"
                                         autoComplete="family-name"
                                     />
                                 </Grid>
                             </Grid>
 
-                            <Grid item xs={12} ml={2} style={{ display: "flex", alignItems: "center" }} p={1}>
+                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                     Pronoun preference
                                 </Typography>
                                 <Grid item xs={2} ml={3} mb={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Pronou</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">Pronoun</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={pronou}
-                                            label="Pronou"
-                                            onChange={handlePronouChange}
+                                            value={pronoun}
+                                            label="Pronoun"
+                                            onChange={handlePronounChange}
                                         >
                                             <MenuItem value={1}>he/his</MenuItem>
                                             <MenuItem value={2}>she/her</MenuItem>
@@ -194,24 +194,24 @@ export default function SettingsPage() {
                 {/* tab p2 contact*/}
                 <TabPanel value={value} index={1}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" gutterBottom component="div">
                                 Contact
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
                                 Where we send important messages about your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{ display: "flex", alignItems: "center" }} p={2}>
+                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                     Email
                                 </Typography>
@@ -233,24 +233,24 @@ export default function SettingsPage() {
 
                     {/* tab p2 security*/}
                     <Grid container spacing={2} mt={5}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }} >
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" gutterBottom component="div">
                                 Security
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
                                 Keep your account safe and sound
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
-                        }} xs={8} component={Paper} elevation={20} >
-                            <Grid item xs={12} ml={2} style={{ display: "flex", alignItems: "center" }} p={2}>
+                        }} xs={8} component={Paper} elevation={20}>
+                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                     Password
                                 </Typography>
@@ -259,7 +259,7 @@ export default function SettingsPage() {
                                         Change password
                                     </Link>
                                 </Grid>
-                                <Grid item xs={12} style={{ display: "flex", alignItems: "center" }}>
+                                <Grid item xs={12} style={{display: "flex", alignItems: "center"}}>
                                     <Typography color="secondary" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                         Improve your security with a strong password.
                                     </Typography>
@@ -272,31 +272,31 @@ export default function SettingsPage() {
 
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" gutterBottom component="div">
                                 Notifications
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} style={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
                                 Get notifications you care about. We may notify you about updates to your account.
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{ display: "flex", alignItems: "center" }} p={2}>
+                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                     Message
                                 </Typography>
                                 <Grid item xs={1} mx={2} mb={3}>
-                                    <Switch {...label} defaultChecked />
+                                    <Switch {...label} defaultChecked/>
                                 </Grid>
-                                <Grid item xs={12} style={{ display: "flex", alignItems: "center" }}>
+                                <Grid item xs={12} style={{display: "flex", alignItems: "center"}}>
                                     <Typography color="secondary" fontWeight="bold" mb={3} variant="body1" gutterBottom>
                                         When turned off, you won't get any more news from us.
                                     </Typography>
