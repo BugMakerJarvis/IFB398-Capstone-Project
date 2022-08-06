@@ -99,6 +99,7 @@ export default function SignUpSide() {
                 .then(async (userCredential) => {
                     await addDoc(collection(getFirestore(), 'userProfile'), {
                         uid: userCredential.user.uid,
+                        email: email,
                         firstName: firstName,
                         lastName: lastName,
                         receiveEmail: data.get("receiveEmail") === "on",

@@ -1,19 +1,19 @@
 import {
+    browserSessionPersistence,
+    createUserWithEmailAndPassword,
+    FacebookAuthProvider,
     getAuth,
-    setPersistence,
-    updateProfile,
+    GoogleAuthProvider,
+    inMemoryPersistence,
     sendEmailVerification,
     sendPasswordResetEmail,
-    browserSessionPersistence,
-    inMemoryPersistence,
-    createUserWithEmailAndPassword,
+    setPersistence,
     signInWithEmailAndPassword,
-    GoogleAuthProvider,
-    FacebookAuthProvider,
     signInWithPopup,
     signOut,
+    updateProfile,
 } from 'firebase/auth';
-import {collection, doc, getFirestore} from "firebase/firestore";
+import {collection, getFirestore, query, where, getDocs} from "firebase/firestore";
 
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.
@@ -112,11 +112,24 @@ export async function resetPwd(email) {
         .then(() => {
             // Password reset email sent!
             // ..
-            console.log("success")
+            console.log("Password reset email sent!");
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             // ..
+            console.log("An error occurred when sending password reset email!", error);
         });
+}
+
+export async function getUserProfile(email) {
+    const q = query(collection(getFirestore(), 'userProfile'), where("email", "==", email));
+
+    const querySnapshot = await getDocs(q);
+    let user = {};
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        user = doc.data();
+    });
+    return user;
 }
