@@ -13,9 +13,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useEffect} from "react";
-import {getAuth} from "firebase/auth";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useEffect } from "react";
+import { getAuth } from "firebase/auth";
 import Button from "@mui/material/Button";
 
 
@@ -48,7 +48,7 @@ const theme = createTheme({
 });
 
 function TabPanel(props) {
-    const {children, value, index, ...other} = props;
+    const { children, value, index, ...other } = props;
 
     return (
         <div
@@ -59,8 +59,8 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{p: 3}}>
-                    <Typography>{children}</Typography>
+                <Box sx={{ p: 3 }}>
+                    {children}
                 </Box>
             )}
         </div>
@@ -93,11 +93,11 @@ export default function SettingsPage() {
         setPronoun(event.target.value);
     };
 
-    const label = {inputProps: {'aria-label': 'Switch demo'}};
+    const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{width: '100%'}}>
+            <Box sx={{ width: '100%' }}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
                     </Grid>
@@ -115,107 +115,110 @@ export default function SettingsPage() {
                     </Grid>
                 </Grid>
             </Box>
-            <Box sx={{minHeight: "60vh"}}>
+            
+            <Box sx={{ minHeight: "60vh" }}>
                 <TabPanel value={value} index={0}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="primary" variant="h6" gutterBottom component="div">
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography color="primary" variant="h6" component="span">
                                 Profile Settings
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography color="secondary" mb={3} variant="subtitle1" component="span">
                                 Change identifying details for your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
+                        
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            {/*<Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>*/}
-                            {/*    <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>*/}
-                            {/*        First Name*/}
-                            {/*    </Typography>*/}
-                            {/*    <Grid item xs={2} ml={3} mb={3}>*/}
-                            {/*        <TextField*/}
-                            {/*            disabled={true}*/}
-                            {/*            color="primary"*/}
-                            {/*            autoComplete="given-name"*/}
-                            {/*            name="firstName"*/}
-                            {/*            fullWidth*/}
-                            {/*            id="firstName"*/}
-                            {/*            label="First Name"*/}
-                            {/*        />*/}
-                            {/*    </Grid>*/}
-                            {/*</Grid>*/}
-
-                            {/*<Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>*/}
-                            {/*    <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>*/}
-                            {/*        Last Name*/}
-                            {/*    </Typography>*/}
-                            {/*    <Grid item xs={2} ml={3} mb={3}>*/}
-                            {/*        <TextField*/}
-                            {/*            disabled={true}*/}
-                            {/*            color="primary"*/}
-                            {/*            fullWidth*/}
-                            {/*            id="lastName"*/}
-                            {/*            label="Last Name"*/}
-                            {/*            name="lastName"*/}
-                            {/*            autoComplete="family-name"*/}
-                            {/*        />*/}
-                            {/*    </Grid>*/}
-                            {/*</Grid>*/}
-
-                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={1}>
-                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                    Pronoun preference
+                            <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={1}>
+                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" component="span">
+                                    Display Name
                                 </Typography>
                                 <Grid item xs={2} ml={3} mb={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Pronoun</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={pronoun}
-                                            label="Pronoun"
-                                            onChange={handlePronounChange}
-                                        >
-                                            <MenuItem value={1}>he/his</MenuItem>
-                                            <MenuItem value={2}>she/her</MenuItem>
-                                            <MenuItem value={3}>they/them</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                    <TextField
+                                        variant="filled"
+                                        disabled={true}
+                                        color="primary"
+                                        name="displayName"
+                                        fullWidth
+                                        id="displayName"
+                                        label="Display Name"
+                                    />
                                 </Grid>
                             </Grid>
+
+                            {/* submit box */}
+                            <Box
+                                component="form"
+                                noValidate
+                            // onSubmit={handleSubmit}
+                            >
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={1}>
+                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1">
+                                        Pronoun preference
+                                    </Typography>
+                                    <Grid item xs={2} ml={3} mb={3}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Pronoun</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={pronoun}
+                                                label="Pronoun"
+                                                onChange={handlePronounChange}
+                                            >
+                                                <MenuItem value={1}>he/his</MenuItem>
+                                                <MenuItem value={2}>she/her</MenuItem>
+                                                <MenuItem value={3}>they/them</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid item xs={2} ml={1} mb={3}>
+                                    <Button
+                                        color="primary"
+                                        size="large"
+                                        type="submit"
+                                        variant="contained"
+                                    >
+                                        Save change
+                                    </Button>
+                                </Grid>
+                            </Box>
+
                         </Grid>
                     </Grid>
                 </TabPanel>
 
-                {/* tab p2 contact*/}
                 <TabPanel value={value} index={1}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="primary" variant="h6" gutterBottom component="div">
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography color="primary" variant="h6" component="div">
                                 Contact
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Where we send important messages about your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
-                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
+                            <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
+                                <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                     Email
                                 </Typography>
                                 <Grid item xs={4} ml={3} mb={3}>
@@ -234,85 +237,135 @@ export default function SettingsPage() {
                         </Grid>
                     </Grid>
 
-                    {/* tab p2 security*/}
                     {localStorage.getItem("emailVerified") === "true" && localStorage.getItem("providerId") === "password" ?
                         <Grid container spacing={2} mt={5}>
-                            <Grid item xs={2}/>
-                            <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                                <Typography color="primary" variant="h6" gutterBottom component="div">
+                            <Grid item xs={2} />
+                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography color="primary" variant="h6" component="div">
                                     Security
                                 </Typography>
                             </Grid>
-                            <Grid item xs={2}/>
-                            <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                                <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
+                            <Grid item xs={2} />
+                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                     Keep your account safe and sound
                                 </Typography>
                             </Grid>
-                            <Grid item xs={2}/>
+                            <Grid item xs={2} />
                             <Grid item sx={{
                                 height: 'auto',
                                 backgroundColor: "rgba(255,255,255,0.2)"
                             }} xs={8} component={Paper} elevation={20}>
-                                <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
-                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
+                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Password
                                     </Typography>
                                     <Grid item xs={4} ml={3} mb={3}>
-                                        <Link href="#" color="primary" fontWeight="bold">
+                                        <Link href="/forgetpwd" color="primary" fontWeight="bold">
                                             Change password
                                         </Link>
                                     </Grid>
-                                    <Grid item xs={12} style={{display: "flex", alignItems: "center"}}>
+                                    <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
                                         <Typography color="secondary" fontWeight="bold" mb={3} variant="body1"
-                                                    gutterBottom>
+                                        >
                                             Improve your security with a strong password.
                                         </Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid> : null}
+                        </Grid> :
+                        <Grid container spacing={2} mt={5}>
+                            <Grid item xs={2} />
+                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography color="primary" variant="h6" >
+                                    Security
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={2} />
+                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography color="secondary" mb={3} variant="subtitle1" >
+                                    Keep your account safe and sound
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={2} />
+                            <Grid item sx={{
+                                height: 'auto',
+                                backgroundColor: "rgba(255,255,255,0.2)"
+                            }} xs={8} component={Paper} elevation={20}>
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
+                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1" >
+                                        Password
+                                    </Typography>
+                                    <Grid item xs={12} ml={3} sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
+                                            You can't change your password here by logging in with Google account.
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    }
 
                 </TabPanel>
-                {/* tab3 */}
 
+                {/* tab3 */}
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="primary" variant="h6" gutterBottom component="div">
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography color="primary" variant="h6" component="div">
                                 Notifications
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} style={{display: "flex", alignItems: "center"}}>
-                            <Typography color="secondary" mb={3} variant="subtitle1" gutterBottom component="div">
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Get notifications you care about. We may notify you about updates to your account.
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
+
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} style={{display: "flex", alignItems: "center"}} p={2}>
-                                <Typography color="black" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                    Message
-                                </Typography>
-                                <Grid item xs={1} mx={2} mb={3}>
-                                    <Switch {...label} defaultChecked/>
-                                </Grid>
-                                <Grid item xs={12} style={{display: "flex", alignItems: "center"}}>
-                                    <Typography color="secondary" fontWeight="bold" mb={3} variant="body1" gutterBottom>
-                                        When turned off, you won't get any more news from us.
+                            {/* submit box */}
+                            <Box
+                                component="form"
+                                noValidate
+                            // onSubmit={handleSubmit}
+                            >
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
+                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1">
+                                        Message
                                     </Typography>
-                                </Grid>
 
-                            </Grid>
+                                    <Grid item xs={1} mx={2} mb={3}>
+                                        <Switch {...label} defaultChecked />
+                                    </Grid>
+                                    <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
+                                            When turned off, you won't get any more news from us.
+                                        </Typography>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid item xs={2} ml={1} mb={3}>
+                                    <Button
+                                        color="primary"
+                                        size="large"
+                                        type="submit"
+                                        variant="contained"
+                                    >
+                                        Save change
+                                    </Button>
+                                </Grid>
+                            </Box>
+
                         </Grid>
                     </Grid>
                 </TabPanel>
             </Box>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }

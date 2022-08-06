@@ -191,7 +191,7 @@ export default function SignInSide(props) {
                                 alignItems: 'center',
                             }}
                         >
-                            <Link href="#" color="primary" fontWeight="bold">
+                            <Link href="/forgetpwd" color="primary" fontWeight="bold">
                                 Forgot password?
                             </Link>
                             <Link href="/signup" color="primary" fontWeight="bold">
