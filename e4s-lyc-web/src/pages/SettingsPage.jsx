@@ -17,6 +17,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import Button from "@mui/material/Button";
+import {resetPwd, signOutUser} from "../services/auth";
+import {useNavigate} from "react-router";
 
 
 const theme = createTheme({
@@ -81,6 +83,13 @@ function a11yProps(index) {
 }
 
 export default function SettingsPage() {
+
+    const navigate = useNavigate();
+
+    function pushToHome() {
+        navigate('/')
+    }
+
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -261,7 +270,11 @@ export default function SettingsPage() {
                                         Password
                                     </Typography>
                                     <Grid item xs={4} ml={3} mb={3}>
-                                        <Link href="/forgetpwd" color="primary" fontWeight="bold">
+                                        <Link href="#" color="primary" fontWeight="bold"
+                                              onClick={() => resetPwd(localStorage.getItem("currentUserEmail")).then(() => signOutUser().then(() => {
+                                                  localStorage.clear();
+                                                  pushToHome();
+                                              }))}>
                                             Change password
                                         </Link>
                                     </Grid>
