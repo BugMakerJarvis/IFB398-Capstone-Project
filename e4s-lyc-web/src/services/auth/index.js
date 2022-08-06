@@ -3,6 +3,7 @@ import {
     setPersistence,
     updateProfile,
     sendEmailVerification,
+    sendPasswordResetEmail,
     browserSessionPersistence,
     inMemoryPersistence,
     createUserWithEmailAndPassword,
@@ -103,5 +104,19 @@ export async function signIn(email, password) {
             // ...
             // New sign-in will be persisted with session persistence.
             return signInWithEmailAndPassword(getAuth(), email, password);
+        });
+}
+
+export async function resetPwd(email) {
+    await sendPasswordResetEmail(getAuth(), email)
+        .then(() => {
+            // Password reset email sent!
+            // ..
+            console.log("success")
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
         });
 }
