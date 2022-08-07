@@ -13,7 +13,7 @@ import {
     signOut,
     updateProfile,
 } from 'firebase/auth';
-import {collection, getFirestore, query, where, getDocs} from "firebase/firestore";
+import {collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc} from "firebase/firestore";
 
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.
@@ -86,7 +86,7 @@ export async function register(email, password, firstName, lastName) {
         displayName: `${firstName} ${lastName}`
     }).then(() => {
         // Profile updated!
-        console.log("Profile updated!");
+        console.log("User profile updated!");
     }).catch((error) => {
         // An error occurred
         console.log("An error occurred when updating profile!", error);
@@ -127,9 +127,17 @@ export async function getUserProfile(email) {
 
     const querySnapshot = await getDocs(q);
     let user = {};
+    let pathSegments = "";
     querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         user = doc.data();
+        pathSegments = doc.ref.path.split("/")[1];
     });
-    return user;
+    return {user: user, pathSegments: pathSegments};
+}
+
+export async function updateUserProfile(email, data) {
+    const res = await getUserProfile(email);
+    const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
+    await updateDoc(docRef, data);
 }

@@ -103,7 +103,7 @@ export default function SignUpSide() {
                         firstName: firstName,
                         lastName: lastName,
                         receiveEmail: data.get("receiveEmail") === "on",
-                        timestamp: serverTimestamp()
+                        createTimeStamp: serverTimestamp()
                     });
                 }).then(() => {
                     localStorage.setItem("currentUserName", `${firstName} ${lastName}`)

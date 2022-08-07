@@ -15,12 +15,13 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Button from "@mui/material/Button";
-import { getUserName, getUserProfile, resetPwd, signOutUser } from "../services/auth";
-import { useNavigate } from "react-router";
-import { Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { useEffect, useState } from "react";
+import {getUserName, getUserProfile, resetPwd, signOutUser, updateUserProfile} from "../services/auth";
+import {useNavigate} from "react-router";
+import {Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar} from "@mui/material";
+import {useEffect, useState} from "react";
+import {addDoc, collection, getFirestore, serverTimestamp} from "firebase/firestore";
 
 
 const theme = createTheme({
@@ -52,7 +53,7 @@ const theme = createTheme({
 });
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const {children, value, index, ...other} = props;
 
     return (
         <div
@@ -63,7 +64,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box sx={{p: 3}}>
                     {children}
                 </Box>
             )}
@@ -98,40 +99,61 @@ export default function SettingsPage() {
         setValue(newValue);
     };
 
-    const [pronoun, setPronoun] = useState('');
-
     const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
 
-    const handlePronounChange = (event) => {
-        setPronoun(event.target.value);
+    const label = {inputProps: {'aria-label': 'Switch demo'}};
+
+    const [receiveEmail, setReceiveEmail] = useState(false);
+
+    const handleReceiveEmailChange = (event) => {
+        setReceiveEmail(event.target.checked);
+    }
+
+    const [pronoun, setPronoun] = useState("he/his");
+
+    const handleChangePronoun = (event, newPronoun) => {
+        setPronoun(newPronoun);
     };
 
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    const [bio, setBio] = useState("");
 
-    const [receiveEmail, setReceiveEmail] = useState(true);
+    const handleBioChange = (event) => {
+        setBio(event.target.value);
+    }
 
-    const [alignment, setAlignment] = React.useState('web');
-
-    const handleChangePronoun = (event, newAlignment) => {
-        setAlignment(newAlignment);
-    };
+    const currentUserEmail = localStorage.getItem("currentUserEmail");
 
     useEffect(() => {
         try {
-            getUserProfile(localStorage.getItem("currentUserEmail")).then(r => {
-                setReceiveEmail(r.receiveEmail);
-                if (r.pronoun) {
-                    setPronoun(r.pronoun);
+            getUserProfile(currentUserEmail).then(r => {
+                if (r.user) {
+                    if (r.user.bio) setBio(r.user.bio);
+                    if (r.user.pronoun) setPronoun(r.user.pronoun);
+                    if (r.user.receiveEmail) setReceiveEmail(r.user.receiveEmail);
                 }
             });
         } catch (error) {
-            console.log("An error occurred when sending password reset email!", error);
+            console.log("An error occurred when getting user profile!", error);
         }
     }, []);
 
+    const isEmailVerified = localStorage.getItem("emailVerified") === "true";
+    const isSignedInByPwd = localStorage.getItem("providerId") === "password";
+
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+    const [snackbarMsg, setSnackbarMsg] = React.useState("Your profile has been updated!");
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{width: '100%'}}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
                     </Grid>
@@ -150,28 +172,28 @@ export default function SettingsPage() {
                 </Grid>
             </Box>
 
-            <Box sx={{ minHeight: "60vh" }}>
+            <Box sx={{minHeight: "60vh"}}>
                 <TabPanel value={value} index={0}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" component="span">
                                 Profile Settings
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="span">
                                 Change identifying details for your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
 
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={10}>
-                            <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={1}>
+                            <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={1}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" component="span">
                                     Display Name
                                 </Typography>
@@ -193,41 +215,27 @@ export default function SettingsPage() {
                                 height="auto"
                                 component="form"
                                 noValidate
-                            // onSubmit={handleSubmit}
+                                // onSubmit={handleSubmit}
                             >
-                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={1}>
+                                <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={1}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Pronoun preference
                                     </Typography>
                                     <Grid item xs={4} mb={3}>
-                                        {/* <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Pronoun</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={pronoun}
-                                                label="Pronoun"
-                                                onChange={handlePronounChange}
-                                            >
-                                                <MenuItem value={1}>he/his</MenuItem>
-                                                <MenuItem value={2}>she/her</MenuItem>
-                                                <MenuItem value={3}>they/them</MenuItem>
-                                            </Select>
-                                        </FormControl> */}
                                         <ToggleButtonGroup
                                             color="primary"
-                                            value={alignment}
+                                            value={pronoun}
                                             exclusive
                                             onChange={handleChangePronoun}
                                         >
-                                            <ToggleButton value="web">he/his</ToggleButton>
-                                            <ToggleButton value="android">she/her</ToggleButton>
-                                            <ToggleButton value="ios">they/them</ToggleButton>
+                                            <ToggleButton value="he/his">he/his</ToggleButton>
+                                            <ToggleButton value="she/her">she/her</ToggleButton>
+                                            <ToggleButton value="they/them">they/them</ToggleButton>
                                         </ToggleButtonGroup>
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12} ml={2} sx={{ display: "flex", justifyContent: "flex-start" }} p={1}>
+                                <Grid item xs={12} ml={2} sx={{display: "flex", justifyContent: "flex-start"}} p={1}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Bio
                                     </Typography>
@@ -235,25 +243,30 @@ export default function SettingsPage() {
                                         <TextField
                                             fullWidth
                                             id="outlined-multiline-flexible"
-                                            label="Details about youself"
+                                            label="Details about yourself"
                                             multiline
                                             rows={4}
-                                        // defaultValue="Details about youself."
-                                        // value={value}
-                                        // onChange={handleChange}
+                                            value={bio}
+                                            onChange={handleBioChange}
                                         />
                                     </Grid>
                                 </Grid>
 
                                 <Grid item xs={12} display="flex"
-                                    justifyContent="flex-end"
-                                    alignItems="flex-end" mr={5} mb={3}>
+                                      justifyContent="flex-end"
+                                      alignItems="flex-end" mr={5} mb={3}>
                                     <Button
                                         color="primary"
                                         size="large"
-                                        // type="submit"
                                         variant="contained"
                                         onClick={() => {
+                                            try {
+                                                const res = updateUserProfile(currentUserEmail, {bio, pronoun});
+                                                setSnackbarOpen(true);
+                                            } catch (error) {
+                                                setSnackbarMsg("An error occurred when updating user profile!")
+                                                setSnackbarOpen(true);
+                                            }
                                         }}
                                     >
                                         Save change
@@ -267,24 +280,24 @@ export default function SettingsPage() {
 
                 <TabPanel value={value} index={1}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" component="div">
                                 Contact
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Where we send important messages about your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
+                            <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                     Email
                                 </Typography>
@@ -297,125 +310,119 @@ export default function SettingsPage() {
                                         name="email"
                                         fullWidth
                                         id="email"
-                                        label={localStorage.getItem("currentUserEmail")}
+                                        label={currentUserEmail}
                                     />
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
 
-                    {localStorage.getItem("emailVerified") === "true" && localStorage.getItem("providerId") === "password" ?
-                        <Grid container spacing={2} mt={5}>
-                            <Grid item xs={2} />
-                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
-                                <Typography color="primary" variant="h6" component="div">
-                                    Security
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
-                                <Typography color="secondary" mb={3} variant="subtitle1" component="div">
-                                    Keep your account safe and sound
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <Grid item sx={{
-                                height: 'auto',
-                                backgroundColor: "rgba(255,255,255,0.2)"
-                            }} xs={8} component={Paper} elevation={20}>
-                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
-                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1">
-                                        Password
-                                    </Typography>
-                                    <Grid item xs={4} ml={3} mb={3}>
-                                        <Link href="#" color="primary" fontWeight="bold"
-                                            onClick={() => resetPwd(localStorage.getItem("currentUserEmail")).then(() => signOutUser().then(() => {
-                                                setVerificationDialogOpen(true);
-                                            }))}>
-                                            Change password
-                                        </Link>
-                                        <Dialog
-                                            open={verificationDialogOpen}
-                                            onClose={() => setVerificationDialogOpen(false)}
-                                            aria-labelledby="alert-dialog-title"
-                                            aria-describedby="alert-dialog-description"
-                                        >
-                                            <DialogTitle id="alert-dialog-title">
-                                                {"Email Verification"}
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText id="alert-dialog-description">
-                                                    {`We've sent an email to ${localStorage.getItem("currentUserEmail")}, you can reset your password via the email.`}
-                                                </DialogContentText>
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={() => {
-                                                    setVerificationDialogOpen(false);
-                                                    localStorage.clear();
-                                                    pushToHome();
-                                                }}>OK</Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    </Grid>
-                                    <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-                                        <Typography color="secondary" fontWeight="bold" mb={3} variant="body1"
-                                        >
-                                            Improve your security with a strong password.
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid> :
-                        <Grid container spacing={2} mt={5}>
-                            <Grid item xs={2} />
-                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
-                                <Typography color="primary" variant="h6">
-                                    Security
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
-                                <Typography color="secondary" mb={3} variant="subtitle1">
-                                    Keep your account safe and sound
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <Grid item sx={{
-                                height: 'auto',
-                                backgroundColor: "rgba(255,255,255,0.2)"
-                            }} xs={8} component={Paper} elevation={20}>
-                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
-                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1">
-                                        Password
-                                    </Typography>
-                                    <Grid item xs={12} ml={3} sx={{ display: "flex", alignItems: "center" }}>
-                                        <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
-                                            You can't change your password here by logging in with Google account.
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
+                    <Grid container spacing={2} mt={5}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                            <Typography color="primary" variant="h6" component="div">
+                                Security
+                            </Typography>
                         </Grid>
-                    }
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                            <Typography color="secondary" mb={3} variant="subtitle1" component="div">
+                                Keep your account safe and sound
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={2}/>
+                        <Grid item sx={{
+                            height: 'auto',
+                            backgroundColor: "rgba(255,255,255,0.2)"
+                        }} xs={8} component={Paper} elevation={20}>
+                            {!isSignedInByPwd ?
+                                <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                    <Typography color="black" fontWeight="bold" mb={3} variant="body1">
+                                        Password
+                                    </Typography>
+                                    <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
+                                        <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
+                                            <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
+                                                You can't change your password here by logging in with Google account.
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Grid> : (isEmailVerified ?
+                                    <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                        <Typography color="black" fontWeight="bold" mb={3} variant="body1">
+                                            Password
+                                        </Typography>
+                                        <Grid item xs={4} ml={3} mb={3}>
+                                            <Link href="#" color="primary" fontWeight="bold"
+                                                  onClick={() => resetPwd(currentUserEmail).then(() => signOutUser().then(() => {
+                                                      setVerificationDialogOpen(true);
+                                                  }))}>
+                                                Change password
+                                            </Link>
+                                            <Dialog
+                                                open={verificationDialogOpen}
+                                                onClose={() => setVerificationDialogOpen(false)}
+                                                aria-labelledby="alert-dialog-title"
+                                                aria-describedby="alert-dialog-description"
+                                            >
+                                                <DialogTitle id="alert-dialog-title">
+                                                    {"Email Verification"}
+                                                </DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        {`We've sent an email to ${currentUserEmail}, you can reset your password via the email.`}
+                                                    </DialogContentText>
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <Button onClick={() => {
+                                                        setVerificationDialogOpen(false);
+                                                        localStorage.clear();
+                                                        pushToHome();
+                                                    }}>OK</Button>
+                                                </DialogActions>
+                                            </Dialog>
+                                        </Grid>
+                                        <Grid item xs={12} sx={{display: "flex", alignItems: "center"}}>
+                                            <Typography color="secondary" fontWeight="bold" mb={3} variant="body1"
+                                            >
+                                                Improve your security with a strong password.
+                                            </Typography>
+                                        </Grid>
+                                    </Grid> :
+                                    <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                        <Typography color="black" fontWeight="bold" mb={3} variant="body1">
+                                            Password
+                                        </Typography>
+                                        <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
+                                            <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
+                                                <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
+                                                    You can't change your password here because you haven't verify your
+                                                    email.
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>)}
+                        </Grid>
+                    </Grid>
 
                 </TabPanel>
 
                 {/* tab3 */}
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
                             <Typography color="primary" variant="h6" component="div">
                                 Notifications
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
+                        <Grid item xs={2}/>
+                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Get notifications you care about. We may notify you about updates to your account.
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}/>
 
                         <Grid item sx={{
                             height: 'auto',
@@ -425,17 +432,17 @@ export default function SettingsPage() {
                             <Box
                                 component="form"
                                 noValidate
-                            // onSubmit={handleSubmit}
+                                // onSubmit={handleSubmit}
                             >
-                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
+                                <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Message
                                     </Typography>
 
                                     <Grid item xs={1} mx={2} mb={3}>
-                                        <Switch {...label} value={receiveEmail} />
+                                        <Switch {...label} checked={receiveEmail} onChange={handleReceiveEmailChange}/>
                                     </Grid>
-                                    <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
+                                    <Grid item xs={12} sx={{display: "flex", alignItems: "center"}}>
                                         <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
                                             When turned off, you won't get any more news from us.
                                         </Typography>
@@ -443,13 +450,22 @@ export default function SettingsPage() {
 
                                 </Grid>
                                 <Grid item display="flex"
-                                    justifyContent="flex-end"
-                                    alignItems="flex-end" xs={12} mr={5} mb={3}>
+                                      justifyContent="flex-end"
+                                      alignItems="flex-end" xs={12} mr={5} mb={3}>
                                     <Button
                                         color="primary"
                                         size="large"
                                         // type="submit"
                                         variant="contained"
+                                        onClick={() => {
+                                            try {
+                                                const res = updateUserProfile(currentUserEmail, {receiveEmail: receiveEmail});
+                                                setSnackbarOpen(true);
+                                            } catch (error) {
+                                                setSnackbarMsg("An error occurred when updating user profile!")
+                                                setSnackbarOpen(true);
+                                            }
+                                        }}
                                     >
                                         Save change
                                     </Button>
@@ -459,6 +475,15 @@ export default function SettingsPage() {
                     </Grid>
                 </TabPanel>
             </Box>
+
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+            }} open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleSnackbarClose} severity="success" sx={{width: '100%'}}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </ThemeProvider>
     );
 }
