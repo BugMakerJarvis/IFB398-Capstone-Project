@@ -140,9 +140,10 @@ export default function SettingsPage() {
     const isEmailVerified = localStorage.getItem("emailVerified") === "true";
     const isSignedInByPwd = localStorage.getItem("providerId") === "password";
 
-    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarState, setSnackbarState] = useState("success");
 
-    const [snackbarMsg, setSnackbarMsg] = React.useState("Your profile has been updated!");
+    const [snackbarMsg, setSnackbarMsg] = useState("Your profile has been updated!");
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -259,12 +260,13 @@ export default function SettingsPage() {
                                         color="primary"
                                         size="large"
                                         variant="contained"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             try {
-                                                const res = updateUserProfile(currentUserEmail, {bio, pronoun});
+                                                const res = await updateUserProfile(currentUserEmail, {bio, pronoun});
                                                 setSnackbarOpen(true);
                                             } catch (error) {
                                                 setSnackbarMsg("An error occurred when updating user profile!")
+                                                setSnackbarState("error");
                                                 setSnackbarOpen(true);
                                             }
                                         }}
@@ -457,12 +459,13 @@ export default function SettingsPage() {
                                         size="large"
                                         // type="submit"
                                         variant="contained"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             try {
-                                                const res = updateUserProfile(currentUserEmail, {receiveEmail: receiveEmail});
+                                                const res = await updateUserProfile(currentUserEmail, {receiveEmail: receiveEmail});
                                                 setSnackbarOpen(true);
                                             } catch (error) {
-                                                setSnackbarMsg("An error occurred when updating user profile!")
+                                                setSnackbarMsg("An error occurred when updating user profile!");
+                                                setSnackbarState("error");
                                                 setSnackbarOpen(true);
                                             }
                                         }}
@@ -480,7 +483,7 @@ export default function SettingsPage() {
                 vertical: 'top',
                 horizontal: 'center'
             }} open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-                <Alert onClose={handleSnackbarClose} severity="success" sx={{width: '100%'}}>
+                <Alert onClose={handleSnackbarClose} severity={snackbarState} sx={{width: '100%'}}>
                     {snackbarMsg}
                 </Alert>
             </Snackbar>

@@ -13,7 +13,7 @@ import {
     signOut,
     updateProfile,
 } from 'firebase/auth';
-import {collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc} from "firebase/firestore";
+import {collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc, addDoc} from "firebase/firestore";
 
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.
@@ -138,6 +138,10 @@ export async function getUserProfile(email) {
 
 export async function updateUserProfile(email, data) {
     const res = await getUserProfile(email);
-    const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
-    await updateDoc(docRef, data);
+    if (JSON.stringify(res.user) === "{}") {
+        await addDoc(collection(getFirestore(), 'userProfile'), {email: email, ...data})
+    } else {
+        const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
+        await updateDoc(docRef, data);
+    }
 }
