@@ -9,6 +9,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Service from "./pages/Service";
+import Fail from "./pages/Fail";
 import SettingsPage from "./pages/SettingsPage";
 import {useState} from "react";
 import Settings from "@mui/icons-material/Settings";
@@ -27,6 +29,8 @@ function App() {
                     <Route path="/signin" element={<SignIn/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/settingspage" element={<SettingsPage/>}/>
+                    <Route path="/service" element={<Service/>}/>
+                    <Route path="/fail" element={<Fail/>}/>
                 </Routes>
                 <Footer/>
             </div>

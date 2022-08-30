@@ -1,12 +1,13 @@
 import React from "react";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { Divider } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+// stripe
+import ReactDOM from 'react-dom';
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe('pk_test_51LWDmVBgowzUydLpDnmdTTL2w9cYZ3O3w7U8XlwEAoWCOTiD3JcfjbXYlap2UgGaB3dMDVLi8U8rdqp0Y4sza4gG00B0JdbUss');
 
 const theme = createTheme({
   components: {
@@ -32,6 +33,23 @@ const theme = createTheme({
     },
   },
 });
+
+const handleClick = async (event) => {
+  // When the customer clicks on the button, redirect them to Checkout.
+  const stripe = await stripePromise;
+  const { error } = await stripe.redirectToCheckout({
+    lineItems: [{
+      price: 'price_1LcLNHBgowzUydLpUxIuLXu3', // Replace with the ID of your price
+      quantity: 1,
+    }],
+    mode: 'payment',
+    successUrl: 'http://localhost:3000/service',
+    cancelUrl: 'http://localhost:3000/fail',
+  });
+  // If `redirectToCheckout` fails due to a browser or network
+  // error, display the localized error message to your customer
+  // using `error.message`.
+};
 
 export default function Home() {
   return (
@@ -132,13 +150,14 @@ export default function Home() {
               variant="contained"
               sx={{ mt: 4 }}
               onClick={() => {
-                window.open("https://buy.stripe.com/test_5kA0377ko0nobss7ss")
+                // window.open("https://buy.stripe.com/test_5kA0377ko0nobss7ss")
+                handleClick()
               }}>
               ADD TO CART
             </Button>
             </Grid>
             <Grid item>
-            <Button
+            {/* <Button
               color="primary"
               size="large"
               type="submit"
@@ -148,7 +167,7 @@ export default function Home() {
                 window.open("https://buy.stripe.com/test_5kA0377ko0nobss7ss")
               }}>
               VIEW CONTENT
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
         <Box
