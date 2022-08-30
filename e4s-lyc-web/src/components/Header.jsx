@@ -165,6 +165,7 @@ export default function Header(props) {
                         width: "auto",
                         height: 150,
                         mb: 4,
+                        marginBottom: "0pxs",
                         // mx: 20,
                         // backgroundColor: 'primary.dark',
                         // '&:hover': {
