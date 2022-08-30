@@ -154,7 +154,7 @@ export default function SettingsPage() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{width: '100%'}}>
+            <Box mt={4} sx={{width: '100%' }}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
                     </Grid>

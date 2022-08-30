@@ -134,7 +134,7 @@ export default function SignUpSide() {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="primary" mb={4} component="h1" variant="h4">
+                        <Typography color="primary" mt={4} mb={4} component="h1" variant="h4">
                             Create Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>

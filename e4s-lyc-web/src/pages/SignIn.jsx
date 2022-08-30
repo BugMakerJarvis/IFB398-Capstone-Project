@@ -111,7 +111,7 @@ export default function SignInSide(props) {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="primary" mb={4} component="h1" variant="h4">
+                        <Typography color="primary" mt={4} mb={4} component="h1" variant="h4">
                             Sign In to Your Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
