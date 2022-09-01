@@ -1,0 +1,152 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+body {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    margin: 0;
+    padding: 0;
+}
+
+/* ////////////////////
+///////  icon  ////////
+//////////////////// */
+
+#icon {
+    margin-left: 200px;
+    padding: 0px 50px;
+}
+
+#icon img {
+    width: 120px;
+}
+
+/* ////////////////////
+///////  nav  ////////
+//////////////////// */
+
+nav {
+    margin-left: 200px;
+    margin-top: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0px 10px;
+}
+
+nav ul li {
+    display: inline-flex;
+}
+
+nav ul li a {
+    color: #000;
+    font-size: 18px;
+    display: block;
+    padding: 15px 20px;
+    transition: 0.3s ease all;
+}
+
+nav ul li a:hover {
+    color: #38F7B4;
+}
+
+.nav-signin a {
+    display: inline-block;
+    color: #000;
+    margin-left: 200px;
+    text-decoration: none;
+    transition: 0.3s ease all;
+}
+
+/* ////////////////////
+///////  drop  ////////
+//////////////////// */
+.dropbtn {
+    padding: 16px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease all;
+}
+.dropbtn a:hover {
+    color: #38F7B4;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    background-color: #fff;
+    text-align: left;
+    display: none;
+    position: absolute;
+    min-width: 220px;
+}
+
+.dropdown-content a {
+    font-size: 18px;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: 0.3s ease all;
+}
+
+.dropdown-content a:hover {
+    color: #38F7B4;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ////////////////////
+///////  content  ////////
+//////////////////// */
+
+.hero {
+    min-height: 1800px;
+    text-align: center;
+    /* background: url("../public/img/bg.png") no-repeat fixed center; */
+    background-size: 60%;
+}
+
+.hero__content {
+    color: #000;
+}
+
+.hero__content a {
+    display: inline-block;
+    color: #fff;
+    border: 3px solid #fff;
+    border-radius: 10px;
+    padding: 18px 30px;
+    margin-right: 20px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: transform 2s;
+}
+
+.hero__content a:hover {
+    background: linear-gradient(-200deg, rgb(244, 164, 96, 0.3), rgb(255, 165, 0));
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+    color: #fff;
+}
