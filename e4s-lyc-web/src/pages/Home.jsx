@@ -59,7 +59,7 @@ export default function Home() {
           component="img"
           sx={{
             height: 'auto',
-            width: 'auto',
+            width: '100%',
           }}
           alt="element-background"
           src="img/homepage_heroImage.png"
