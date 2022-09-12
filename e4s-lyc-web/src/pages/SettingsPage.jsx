@@ -275,7 +275,6 @@ export default function SettingsPage() {
                                     </Button>
                                 </Grid>
                             </Box>
-
                         </Grid>
                     </Grid>
                 </TabPanel>

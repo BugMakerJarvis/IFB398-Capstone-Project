@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import Tooltip from '@mui/material/Tooltip';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -185,7 +184,7 @@ export default function Header(props) {
                         </Grid>
                         <Grid item xs={4} mt={7}>
                             <Typography color="primary" fontSize={22} component={'span'} variant={'body1'}>
-                                Welcome to 21 Day Lead Yourself Challenge!
+                                21 Day Lead Yourself Challenge
                             </Typography>
                         </Grid>
                         {localStorage.getItem("currentUserName") ? nameRightContent : signInRightContent}

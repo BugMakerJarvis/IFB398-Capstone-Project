@@ -25,7 +25,8 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#52BD66',
+      // main: '#52BD66',
+      main: '#20DB90',
       contrastText: '#fff',
     },
     secondary: {
@@ -43,7 +44,7 @@ const handleClick = async (event) => {
       quantity: 1,
     }],
     mode: 'payment',
-    successUrl: 'http://localhost:3000/service',
+    successUrl: 'http://localhost:3000/videolist',
     cancelUrl: 'http://localhost:3000/fail',
   });
   // If `redirectToCheckout` fails due to a browser or network
@@ -89,7 +90,7 @@ export default function Home() {
           sx={{
             width: 360,
             height: 3,
-            backgroundColor: "rgba(82,189,102)",
+            backgroundColor: "rgba(32,219,144)",
             ml: "auto",
             mr: "auto",
             mt: "100px",
@@ -122,7 +123,7 @@ export default function Home() {
           sx={{
             width: 360,
             height: 3,
-            backgroundColor: "rgba(82,189,102)",
+            backgroundColor: "rgba(32,219,144)",
             ml: "auto",
             mr: "auto",
             mt: "100px",
@@ -174,7 +175,7 @@ export default function Home() {
           sx={{
             width: 360,
             height: 3,
-            backgroundColor: "rgba(82,189,102)",
+            backgroundColor: "rgba(32,219,144)",
             ml: "auto",
             mr: "auto",
             mt: "100px",
