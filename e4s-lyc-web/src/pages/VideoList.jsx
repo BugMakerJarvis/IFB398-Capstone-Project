@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea } from '@mui/material';
+import {CardActionArea} from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
@@ -11,7 +11,8 @@ import Box from '@mui/material/Box';
 import DownloadIcon from '@mui/icons-material/Download';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {getVideoCardConfig} from "../config/video-config";
 
 // function Copyright() {
 //   return (
@@ -22,30 +23,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 //     </Typography>
 //   );
 // }
-
-const cards = [
-    { title: "Day1", info: "Your Challenge Inspiration" },
-    { title: "Day2", info: "Connecting To Yourself" },
-    { title: "Day3", info: "Notice Yourself" },
-    { title: "Day4", info: "Energy Giving, Energy Draining" },
-    { title: "Day5", info: "A Day In The Life" },
-    { title: "Day6", info: "Finding Joy" },
-    { title: "Day7", info: "Acknowledging Fear" },
-    { title: "Day8", info: "Self Feedback" },
-    { title: "Day9", info: "Feedback To Others" },
-    { title: "Day10", info: "Notice yourself" },
-    { title: "Day11", info: "Notice yourself" },
-    { title: "Day12", info: "Notice yourself" },
-    { title: "Day13", info: "Notice yourself" },
-    { title: "Day14", info: "Notice yourself" },
-    { title: "Day15", info: "Notice yourself" },
-    { title: "Day16", info: "Notice yourself" },
-    { title: "Day17", info: "Notice yourself" },
-    { title: "Day18", info: "Notice yourself" },
-    { title: "Day19", info: "Notice yourself" },
-    { title: "Day20", info: "Notice yourself" },
-    { title: "Day21", info: "Notice yourself" }
-];
 
 const theme = createTheme({
     components: {
@@ -73,7 +50,6 @@ const theme = createTheme({
 });
 
 
-
 export default function VideoList() {
     const pdfDownload = () => {
         const link = document.createElement("a");
@@ -84,7 +60,7 @@ export default function VideoList() {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline />
+            <CssBaseline/>
             {/* Hero unit */}
             <Box
                 sx={{
@@ -108,7 +84,7 @@ export default function VideoList() {
                         In order to lead ourselves we must first know ourselves.
                     </Typography>
                     <Stack
-                        sx={{ pt: 4 }}
+                        sx={{pt: 4}}
                         direction="row"
                         spacing={2}
                         justifyContent="center"
@@ -124,26 +100,26 @@ export default function VideoList() {
                         <Button
                             variant="outlined"
                             onClick={pdfDownload}>
-                            <DownloadIcon sx={{ mr: 1 }} />
+                            <DownloadIcon sx={{mr: 1}}/>
                             Download pdf decument
                         </Button>
                     </Stack>
                 </Container>
             </Box>
-            <Container sx={{ py: 4 }} maxWidth="md">
+            <Container sx={{py: 4}} maxWidth="md">
                 <Grid container spacing={4}>
-                    {cards.map((card) => (
+                    {getVideoCardConfig().map((card) => (
                         <Grid item xs={12} sm={6} md={4}>
                             <CardActionArea href="/video">
                                 <Card
-                                    sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                                    sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
                                 >
                                     <CardMedia
                                         component="img"
                                         image="img/random.png"
                                         alt="random"
                                     />
-                                    <CardContent sx={{ flexGrow: 1 }}>
+                                    <CardContent sx={{flexGrow: 1}}>
                                         <Typography gutterBottom color="primary" variant="h5" component="h2">
                                             {card.title}
                                         </Typography>
@@ -157,6 +133,6 @@ export default function VideoList() {
                     ))}
                 </Grid>
             </Container>
-        </ThemeProvider >
+        </ThemeProvider>
     );
 }
