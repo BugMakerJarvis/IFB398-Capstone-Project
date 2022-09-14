@@ -183,7 +183,7 @@ export default function Header(props) {
                             </Button>
                         </Grid>
                         <Grid item xs={4} mt={7}>
-                            <Typography color="primary" fontSize={22} component={'span'} variant={'body1'}>
+                            <Typography fontFamily="Lucida Handwriting" color="primary" fontSize={22} component={'span'} variant={'body1'}>
                                 21 Day Lead Yourself Challenge
                             </Typography>
                         </Grid>

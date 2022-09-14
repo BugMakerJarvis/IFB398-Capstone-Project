@@ -3,16 +3,18 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import {CardActionArea} from '@mui/material';
+import { CardActionArea } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import MovieIcon from '@mui/icons-material/Movie';
 import DownloadIcon from '@mui/icons-material/Download';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {getVideoCardConfig} from "../config/video-config";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getVideoCardConfig } from "../config/video-config";
+import { useNavigate } from "react-router-dom";
 
 // function Copyright() {
 //   return (
@@ -49,18 +51,13 @@ const theme = createTheme({
     },
 });
 
-
 export default function VideoList() {
-    const pdfDownload = () => {
-        const link = document.createElement("a");
-        link.download = `Lead Yourself Challenge.pdf`;
-        link.href = "/Lead Yourself Challenge.pdf";
-        link.click();
-    };
+
+    const navigate = useNavigate();
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
+            <CssBaseline />
             {/* Hero unit */}
             <Box
                 sx={{
@@ -71,6 +68,7 @@ export default function VideoList() {
             >
                 <Container maxWidth="sm">
                     <Typography
+                    fontFamily="Comic Sans MS"
                         component="h1"
                         variant="h2"
                         align="center"
@@ -79,12 +77,16 @@ export default function VideoList() {
                     >
                         Welcome!
                     </Typography>
-                    <Typography variant="h5" align="center" color="secondary" paragraph>
+                    <Typography fontFamily="Comic Sans MS" variant="h5" align="center" color="secondary" paragraph>
                         In order to lead throughout our lives we must first learn to lead ourselves.
                         In order to lead ourselves we must first know ourselves.
                     </Typography>
+                    <Typography fontFamily="Comic Sans MS" variant="h5" align="center" color="secondary" paragraph>
+                    -- Kylee leota
+
+                    </Typography>
                     <Stack
-                        sx={{pt: 4}}
+                        sx={{ pt: 4 }}
                         direction="row"
                         spacing={2}
                         justifyContent="center"
@@ -93,33 +95,38 @@ export default function VideoList() {
                             variant="contained"
                             size='large'
                             onClick={() => {
-                                window.open("https://customer-8bro4htdkojvgl0i.cloudflarestream.com/56597506cb40ca7b9d0a69d90e40a556/watch")
+                                window.open("https://customer-8bro4htdkojvgl0i.cloudflarestream.com/efa2a840165570460ce2165a2c302a3a/iframe?preload=true&loop=true&autoplay=true&poster=https%3A%2F%2Fcustomer-8bro4htdkojvgl0i.cloudflarestream.com%2Fefa2a840165570460ce2165a2c302a3a%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600")
                             }}
                         >
+                            <MovieIcon sx={{ mr: 1 }} />
                             Watch Intro Video</Button>
                         <Button
                             variant="outlined"
-                            onClick={pdfDownload}>
-                            <DownloadIcon sx={{mr: 1}}/>
+                            onClick={() => {
+                                window.open("https://firebasestorage.googleapis.com/v0/b/e4s-lyc-web-f1383.appspot.com/o/Lead%20Yourself%20Challenge.pdf?alt=media&token=78a084f5-2bf7-4486-9823-c81471e9c2a8")
+                            }}>
+                            <DownloadIcon sx={{ mr: 1 }} />
                             Download pdf decument
                         </Button>
                     </Stack>
                 </Container>
             </Box>
-            <Container sx={{py: 4}} maxWidth="md">
+            <Container sx={{ py: 4 }} maxWidth="md">
                 <Grid container spacing={4}>
-                    {getVideoCardConfig().map((card) => (
+                    {getVideoCardConfig().map((card, index) => (
                         <Grid item xs={12} sm={6} md={4}>
-                            <CardActionArea href="/video">
+                            <CardActionArea
+                                onClick={() => navigate(`/video?day=${index}`)}
+                            >
                                 <Card
-                                    sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
+                                    sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                                 >
                                     <CardMedia
                                         component="img"
                                         image="img/random.png"
                                         alt="random"
                                     />
-                                    <CardContent sx={{flexGrow: 1}}>
+                                    <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography gutterBottom color="primary" variant="h5" component="h2">
                                             {card.title}
                                         </Typography>
@@ -133,6 +140,6 @@ export default function VideoList() {
                     ))}
                 </Grid>
             </Container>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
