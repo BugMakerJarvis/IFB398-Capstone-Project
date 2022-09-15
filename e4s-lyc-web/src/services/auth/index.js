@@ -122,6 +122,15 @@ export async function resetPwd(email) {
         });
 }
 
+export async function forgetPwd(email) {
+    await sendPasswordResetEmail(getAuth(), email)
+        .then(() => {
+            // Password reset email sent!
+            // ..
+            console.log("Password reset email sent!");
+        });
+}
+
 export async function getUserProfile(email) {
     const q = query(collection(getFirestore(), 'userProfile'), where("email", "==", email));
 

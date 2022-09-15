@@ -15,7 +15,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {signInWithGoogle, signIn, resetPwd} from '../services/auth'
+import { signInWithGoogle, signIn, resetPwd, forgetPwd } from '../services/auth'
 import { useNavigate } from "react-router";
 import { Alert, Collapse, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
@@ -74,12 +74,11 @@ export default function SignInSide(props) {
         navigate('/')
     }
 
-    const [emailForPassword, setEmailForPassword] = useState("");
-    const handleEmailChange = (event) => {
-        setEmailForPassword(event.target.value);
-    }
+    const [emailForPassword, setEmailForPassword] = useState();
 
-    const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
+    const [emailError, setEmailError] = useState();
+
+    const [switchDialog, setSwitchDialog] = useState(1);
 
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -222,57 +221,94 @@ export default function SignInSide(props) {
                             <Link onClick={() => setForgetPasswordDialogOpen(true)} color="primary" fontWeight="bold">
                                 Forgot password?
                             </Link>
-                            <Dialog
-                                open={forgetPasswordDialogOpen}
-                                onClose={() => setForgetPasswordDialogOpen(false)}>
-                                <DialogTitle color="primary">Forget your password?</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>
-                                        To get back into your account, please enter your email address here. We'll send you an email to change your password.
-                                    </DialogContentText>
-                                    <TextField
-                                        value={emailForPassword}
-                                        onChange={handleEmailChange}
-                                        autoFocus
-                                        margin="dense"
-                                        id="email-for-passward"
-                                        label="Email Address"
-                                        type="email"
-                                        fullWidth
-                                        variant="standard"
-                                    />
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={() => setForgetPasswordDialogOpen(false)}>Cancel</Button>
-                                    <Button
-                                    onClick={async () => {
-                                        setVerificationDialogOpen(true);
-                                        await resetPwd(emailForPassword).catch((e) => console.log(e));
-                                    }}
-                                    >Submit</Button>
-                                    <Dialog
-                                        open={verificationDialogOpen}
-                                        onClose={() => setVerificationDialogOpen(false)}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            {"Email Verification"}
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                {`We've sent an email to ${emailForPassword}, you can reset your password via the email.`}
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={() => {
-                                                setVerificationDialogOpen(false);
+                            {switchDialog == 1 ?
+                                <Dialog
+                                    open={forgetPasswordDialogOpen}
+                                    onClose={() => setForgetPasswordDialogOpen(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle color="primary">Forget your password?</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText>
+                                            To get back into your account, please enter your email address here. We'll send you an email to change your password.
+                                        </DialogContentText>
+                                        <TextField
+                                            value={emailForPassword}
+                                            onChange={(event) => {
+                                                const { value } = event.target;
+                                                // correct email format
+                                                if (
+                                                    /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(
+                                                        value
+                                                    )
+                                                ) {
+                                                    setEmailError(null);
+                                                } else {
+                                                    setEmailError("Please enter the correct email format");
+                                                }
+                                                setEmailForPassword(value);
+                                            }}
+                                            autoFocus
+                                            margin="dense"
+                                            id="email-for-passward"
+                                            label="Email Address"
+                                            type="email"
+                                            fullWidth
+                                            variant="standard"
+                                        />
+                                        {emailError != null ? <DialogContentText color="error">{emailError}</DialogContentText> : null}
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button color='secondary'
+                                            onClick={() => {
                                                 setForgetPasswordDialogOpen(false);
-                                            }}>OK</Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                </DialogActions>
-                            </Dialog>
+                                                setEmailForPassword("");
+                                                setEmailError("");
+                                            }}>
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={async () => {
+                                                try {
+                                                    await forgetPwd(emailForPassword);
+                                                    setSwitchDialog(2);
+                                                } catch (error) {
+                                                    setEmailError("User not found")
+                                                }
+                                            }}
+                                            disabled={emailError !== null}
+                                        >Submit</Button>
+                                    </DialogActions>
+                                </Dialog>
+                                :
+                                <Dialog
+                                    open={forgetPasswordDialogOpen}
+                                    onClose={() => setForgetPasswordDialogOpen(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"Email Verification"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {`We've sent an email to ${emailForPassword}, you can reset your password via the email.`}
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button
+                                            onClick={() => {
+                                                setForgetPasswordDialogOpen(false);
+                                                setSwitchDialog(1);
+                                                setEmailForPassword("");
+                                                setEmailError("");
+                                            }}
+                                        >OK</Button>
+                                    </DialogActions>
+                                </Dialog>
+                            }
+
                             <Link href="/signup" color="primary" fontWeight="bold">
                                 Don't have an account? Sign Up
                             </Link>
@@ -281,6 +317,6 @@ export default function SignInSide(props) {
                     <Copyright sx={{ mt: 5 }} />
                 </Grid>
             </Grid>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
