@@ -15,7 +15,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signInWithGoogle, signIn } from '../services/auth'
+import {signInWithGoogle, signIn, resetPwd} from '../services/auth'
 import { useNavigate } from "react-router";
 import { Alert, Collapse, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
@@ -233,7 +233,7 @@ export default function SignInSide(props) {
                                     <TextField
                                         value={emailForPassword}
                                         onChange={handleEmailChange}
-                                        autofocus
+                                        autoFocus
                                         margin="dense"
                                         id="email-for-passward"
                                         label="Email Address"
@@ -245,7 +245,10 @@ export default function SignInSide(props) {
                                 <DialogActions>
                                     <Button onClick={() => setForgetPasswordDialogOpen(false)}>Cancel</Button>
                                     <Button
-                                    onClick={() => setVerificationDialogOpen(true)}
+                                    onClick={async () => {
+                                        setVerificationDialogOpen(true);
+                                        await resetPwd(emailForPassword).catch((e) => console.log(e));
+                                    }}
                                     >Submit</Button>
                                     <Dialog
                                         open={verificationDialogOpen}
