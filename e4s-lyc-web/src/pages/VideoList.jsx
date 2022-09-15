@@ -14,7 +14,16 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { getVideoCardConfig } from "../config/video-config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { updatePaymentStutus, updateUserProfile, getUserProfile } from '../services/auth';
+import { useEffect } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useState } from 'react';
+
 
 // function Copyright() {
 //   return (
@@ -52,11 +61,75 @@ const theme = createTheme({
 });
 
 export default function VideoList() {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const [title, setTitle] = useState();
+    const [msg, setMsg] = useState();
 
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const paymentStatus = searchParams.get("pay");
+
+    useEffect(() => {
+        if (paymentStatus === 'success') {
+            const currentUserEmail = localStorage.getItem("currentUserEmail");
+            const currentDate = new Date().toLocaleDateString();
+            updatePaymentStutus(currentUserEmail, { 'isPurchased': true, 'paymentDate': currentDate });
+        } else if (paymentStatus === 'fail') {
+            setTitle("Payment failure");
+            setMsg("Your payment has failed, please click the button below to return to the home page.");
+            handleClickOpen();
+        } else {
+            if (!localStorage.getItem("currentUserEmail")) {
+                setTitle("You are not logged in!");
+                setMsg("Please sign in to your account before visiting this page.");
+                handleClickOpen();
+            } else {
+                getUserProfile(localStorage.getItem("currentUserEmail")).then((user) => {
+                    if (user.isPurchased !== true) {
+                        setTitle("Warning!!!!");
+                        setMsg("Please visit this page after purchasing the service from the home page.");
+                        handleClickOpen();
+                    }
+                })
+            }
+        }
+    }, [paymentStatus])
+
 
     return (
         <ThemeProvider theme={theme}>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {title}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {msg}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => {
+                        navigate('/');
+                        handleClose();
+                    }} autoFocus>
+                        Bcak to home page
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <CssBaseline />
             {/* Hero unit */}
             <Box
@@ -68,7 +141,7 @@ export default function VideoList() {
             >
                 <Container maxWidth="sm">
                     <Typography
-                    fontFamily="Comic Sans MS"
+                        fontFamily="Comic Sans MS"
                         component="h1"
                         variant="h2"
                         align="center"
@@ -82,7 +155,7 @@ export default function VideoList() {
                         In order to lead ourselves we must first know ourselves.
                     </Typography>
                     <Typography fontFamily="Comic Sans MS" variant="h5" align="center" color="secondary" paragraph>
-                    -- Kylee leota
+                        -- Kylee leota
 
                     </Typography>
                     <Stack

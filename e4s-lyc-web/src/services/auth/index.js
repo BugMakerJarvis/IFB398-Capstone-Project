@@ -13,7 +13,7 @@ import {
     signOut,
     updateProfile,
 } from 'firebase/auth';
-import {collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc, addDoc} from "firebase/firestore";
+import { collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
 
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.
@@ -142,13 +142,23 @@ export async function getUserProfile(email) {
         user = doc.data();
         pathSegments = doc.ref.path.split("/")[1];
     });
-    return {user: user, pathSegments: pathSegments};
+    return { user: user, pathSegments: pathSegments };
 }
 
 export async function updateUserProfile(email, data) {
     const res = await getUserProfile(email);
     if (JSON.stringify(res.user) === "{}") {
-        await addDoc(collection(getFirestore(), 'userProfile'), {email: email, ...data})
+        await addDoc(collection(getFirestore(), 'userProfile'), { email: email, ...data })
+    } else {
+        const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
+        await updateDoc(docRef, data);
+    }
+}
+
+export async function updatePaymentStutus(email, data) {
+    const res = await getUserProfile(email);
+    if (JSON.stringify(res.user) === "{}") {
+        await addDoc(collection(getFirestore(), 'userProfile'), { email: email, ...data })
     } else {
         const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
         await updateDoc(docRef, data);

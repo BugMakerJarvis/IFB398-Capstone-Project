@@ -3,11 +3,66 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from "@mui/material";
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+// import Dialog from '@mui/material/Dialog';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+// import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
+// import Snackbar from "@mui/material";
 
 // stripe
 import ReactDOM from 'react-dom';
 import { loadStripe } from '@stripe/stripe-js';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getUserProfile } from "../services/auth";
 const stripePromise = loadStripe('pk_test_51LWDmVBgowzUydLpDnmdTTL2w9cYZ3O3w7U8XlwEAoWCOTiD3JcfjbXYlap2UgGaB3dMDVLi8U8rdqp0Y4sza4gG00B0JdbUss');
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
+
+const BootstrapDialogTitle = (props) => {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+};
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
 
 const theme = createTheme({
   components: {
@@ -35,6 +90,9 @@ const theme = createTheme({
   },
 });
 
+const urlParams = new URL(window.location.href);
+const urlOrigin = urlParams?.origin;
+
 const handleClick = async (event) => {
   // When the customer clicks on the button, redirect them to Checkout.
   const stripe = await stripePromise;
@@ -44,17 +102,62 @@ const handleClick = async (event) => {
       quantity: 1,
     }],
     mode: 'payment',
-    successUrl: 'http://localhost:3000/videolist',
-    cancelUrl: 'http://localhost:3000/fail',
+    successUrl: urlOrigin + '/videolist?pay=success',
+    cancelUrl: urlOrigin + '/videolist?pay=fail',
   });
   // If `redirectToCheckout` fails due to a browser or network
   // error, display the localized error message to your customer
   // using `error.message`.
 };
 
+
 export default function Home() {
+  const navigate = useNavigate();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const currentUserEmail = localStorage.getItem("currentUserEmail");
+  useEffect(() => {
+    if (currentUserEmail !== null) {
+      getUserProfile(currentUserEmail).then((res) => {
+        if (res.user.isPurchased === true) {
+          handleClickOpen();
+        }
+      })
+    }
+  }, [currentUserEmail]);
   return (
     <section className="hero">
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+          You have already purchased this service
+        </BootstrapDialogTitle>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+            You have already purchased this service, enjoy the video now! Click the button below to go to the video page, or close this dialog box.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => { navigate('/videolist') }}>
+            Video List Page
+          </Button>
+        </DialogActions>
+      </BootstrapDialog>
       <ThemeProvider theme={theme}>
         <Box
           component="img"
@@ -151,24 +254,24 @@ export default function Home() {
               variant="contained"
               sx={{ mt: 4 }}
               onClick={() => {
-                // window.open("https://buy.stripe.com/test_5kA0377ko0nobss7ss")
-                handleClick()
+                if (currentUserEmail === null) {
+                  setSnackbarOpen(true);
+                }else{
+                  getUserProfile(currentUserEmail).then((res)=>{
+                    if(res.user.isPurchased===true){
+                      handleClickOpen();
+                    }else{
+                      handleClick();
+                    }
+                  })
+                }
+                // handleClick()
               }}>
               ADD TO CART
             </Button>
-            </Grid>
-            <Grid item>
-            {/* <Button
-              color="primary"
-              size="large"
-              type="submit"
-              variant="contained"
-              sx={{ mt: 4 }}
-              onClick={() => {
-                window.open("https://buy.stripe.com/test_5kA0377ko0nobss7ss")
-              }}>
-              VIEW CONTENT
-            </Button> */}
+          </Grid>
+          <Grid item>
+
           </Grid>
         </Grid>
         <Box
@@ -185,6 +288,14 @@ export default function Home() {
           }}
         />
       </ThemeProvider>
+      <Snackbar anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center'
+      }} open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          PLEASE SIGN IN YOUR ACCOUNT
+        </Alert>
+      </Snackbar>
     </section>
   );
 }
