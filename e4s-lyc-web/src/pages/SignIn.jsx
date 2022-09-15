@@ -1,19 +1,25 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+// import LoadingButton from '@mui/lab/LoadingButton';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {signInWithGoogle, signIn} from '../services/auth'
-import {useNavigate} from "react-router";
-import {Alert, Collapse, IconButton} from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { signInWithGoogle, signIn } from '../services/auth'
+import { useNavigate } from "react-router";
+import { Alert, Collapse, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import {useState} from "react";
+import { useState } from "react";
 
 function Copyright(props) {
     return (
@@ -36,7 +42,8 @@ const theme = createTheme({
                     textDecoration: "none",
                     ":hover": {
                         textDecoration: "underline",
-                        color: "#52BD66"
+                        color: "#52BD66",
+                        cursor: "pointer"
                     },
                 },
             },
@@ -54,13 +61,25 @@ const theme = createTheme({
 });
 
 export default function SignInSide(props) {
+    // const [loading, setLoading] = React.useState(true);
+    // function handleClick() {
+    //     setLoading(true);
+    // }
     // const {onChange} = props;
+    const [forgetPasswordDialogOpen, setForgetPasswordDialogOpen] = useState(false);
 
     const navigate = useNavigate();
 
     function pushToHome() {
         navigate('/')
     }
+
+    const [emailForPassword, setEmailForPassword] = useState("");
+    const handleEmailChange = (event) => {
+        setEmailForPassword(event.target.value);
+    }
+
+    const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
 
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -74,16 +93,16 @@ export default function SignInSide(props) {
             // })
             .then(() => pushToHome())
             .catch((error) => {
-                    setErrorMessage(error.message.substring(10));
-                    setErrorAlertOpen(true);
-                }
+                setErrorMessage(error.message.substring(10));
+                setErrorAlertOpen(true);
+            }
             );
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <Grid container component="main" sx={{height: '80vh',marginTop:"30px"}}>
+            <CssBaseline />
+            <Grid container component="main" sx={{ height: '80vh', marginTop: "30px" }}>
                 <Grid
                     component={Paper}
                     item
@@ -115,24 +134,24 @@ export default function SignInSide(props) {
                             Sign In to Your Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
-                            <Alert severity="error" sx={{mb: 2}}
-                                   action={
-                                       <IconButton
-                                           aria-label="close"
-                                           color="inherit"
-                                           size="small"
-                                           onClick={() => {
-                                               setErrorAlertOpen(false);
-                                           }}
-                                       >
-                                           <CloseIcon fontSize="inherit"/>
-                                       </IconButton>
-                                   }
+                            <Alert severity="error" sx={{ mb: 2 }}
+                                action={
+                                    <IconButton
+                                        aria-label="close"
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() => {
+                                            setErrorAlertOpen(false);
+                                        }}
+                                    >
+                                        <CloseIcon fontSize="inherit" />
+                                    </IconButton>
+                                }
                             >
                                 {errorMessage}
                             </Alert>
                         </Collapse>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
                                 color="primary"
@@ -161,10 +180,19 @@ export default function SignInSide(props) {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{mt: 4}}
+                                sx={{ mt: 4 }}
                             >
                                 Sign In
                             </Button>
+                            {/* <LoadingButton
+                                size="small"
+                                onClick={handleClick}
+                                loading={loading}
+                                variant="outlined"
+                                disabled
+                            >
+                                disabled
+                            </LoadingButton> */}
                         </Box>
                     </Box>
                     <Box
@@ -182,7 +210,7 @@ export default function SignInSide(props) {
                                 await signInWithGoogle()
                                     // .then(() => onChange(localStorage.getItem("currentUserName")))
                                     .then(() => pushToHome());
-                            }}/>
+                            }} />
                         </Button>
                         <Box
                             sx={{
@@ -191,15 +219,63 @@ export default function SignInSide(props) {
                                 alignItems: 'center',
                             }}
                         >
-                            <Link href="/forgetpwd" color="primary" fontWeight="bold">
+                            <Link onClick={() => setForgetPasswordDialogOpen(true)} color="primary" fontWeight="bold">
                                 Forgot password?
                             </Link>
+                            <Dialog
+                                open={forgetPasswordDialogOpen}
+                                onClose={() => setForgetPasswordDialogOpen(false)}>
+                                <DialogTitle color="primary">Forget your password?</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        To get back into your account, please enter your email address here. We'll send you an email to change your password.
+                                    </DialogContentText>
+                                    <TextField
+                                        value={emailForPassword}
+                                        onChange={handleEmailChange}
+                                        autofocus
+                                        margin="dense"
+                                        id="email-for-passward"
+                                        label="Email Address"
+                                        type="email"
+                                        fullWidth
+                                        variant="standard"
+                                    />
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setForgetPasswordDialogOpen(false)}>Cancel</Button>
+                                    <Button
+                                    onClick={() => setVerificationDialogOpen(true)}
+                                    >Submit</Button>
+                                    <Dialog
+                                        open={verificationDialogOpen}
+                                        onClose={() => setVerificationDialogOpen(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Email Verification"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                {`We've sent an email to ${emailForPassword}, you can reset your password via the email.`}
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => {
+                                                setVerificationDialogOpen(false);
+                                                setForgetPasswordDialogOpen(false);
+                                            }}>OK</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </DialogActions>
+                            </Dialog>
                             <Link href="/signup" color="primary" fontWeight="bold">
                                 Don't have an account? Sign Up
                             </Link>
                         </Box>
                     </Box>
-                    <Copyright sx={{mt: 5}}/>
+                    <Copyright sx={{ mt: 5 }} />
                 </Grid>
             </Grid>
         </ThemeProvider>
