@@ -10,7 +10,6 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Video from "./pages/Video";
-import Fail from "./pages/Fail";
 import SettingsPage from "./pages/SettingsPage";
 import VideoList from "./pages/VideoList";
 import {useState} from "react";
@@ -32,7 +31,6 @@ function App() {
                     <Route path="/settingspage" element={<SettingsPage/>}/>
                     <Route path="/video" element={<Video/>}/>
                     <Route path="/videolist" element={<VideoList/>}/>
-                    <Route path="/fail" element={<Fail/>}/>
                 </Routes>
                 <Footer/>
             </div>

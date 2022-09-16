@@ -128,37 +128,42 @@ export default function Home() {
     setOpen(false);
   };
   const currentUserEmail = localStorage.getItem("currentUserEmail");
-  useEffect(() => {
-    if (currentUserEmail !== null) {
-      getUserProfile(currentUserEmail).then((res) => {
-        if (res.user.isPurchased === true) {
-          handleClickOpen();
-        }
-      })
-    }
-  }, [currentUserEmail]);
+
+  // useEffect(() => {
+  //   if (currentUserEmail !== null) {
+  //     getUserProfile(currentUserEmail).then((res) => {
+  //       if (res.user.isPurchased === true) {
+  //         handleClickOpen();
+  //       }
+  //     })
+  //   }
+  // }, [currentUserEmail]);
+
   return (
     <section className="hero">
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-          You have already purchased this service
-        </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            You have already purchased this service, enjoy the video now! Click the button below to go to the video page, or close this dialog box.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={() => { navigate('/videolist') }}>
-            Video List Page
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
       <ThemeProvider theme={theme}>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          <DialogTitle color="primary" id="customized-dialog-title" onClose={handleClose}>
+            You have already purchased this service
+          </DialogTitle>
+          <DialogContent
+          // dividers
+          >
+            <Typography gutterBottom>
+              You have already purchased this service, enjoy the video now! Click the button below to go to the video page, or close this dialog box.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => { navigate('/videolist') }}>
+              Video List Page
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <Box
           component="img"
           sx={{
@@ -179,14 +184,14 @@ export default function Home() {
             <img src="img/calendar.png" alt="calendar" width={300} />
           </Grid>
           <Grid item>
-            <p style={{ fontSize: "28px", fontWeight: "900" }}>COMING SOON</p>
+            <Typography style={{ fontSize: "28px", fontWeight: "900" }}>COMING SOON</Typography>
 
           </Grid>
           <Grid item>
-            <p style={{ fontSize: "20px", fontWeight: "100" }}>A 21 Day Challenge dedicated to developing your skills as a leader so that you can effectively lead others! This <br />
+            <Typography color="secondary" style={{ fontSize: "20px", fontWeight: "100" }}>A 21 Day Challenge dedicated to developing your skills as a leader so that you can effectively lead others! This <br />
               challenge is dedicated to empowering yourself as a leader. For 21 days, work towards being able to effectively lead <br />
               yourself so that you can successfully lead others! Dive into the world of self-care, self-awareness, vulnerability, and <br />
-              transformation with Element 4 Success' Lead Yourself Challenge.</p>
+              transformation with Element 4 Success' Lead Yourself Challenge.</Typography>
           </Grid>
         </Grid>
         <Box
@@ -210,16 +215,16 @@ export default function Home() {
           alignItems="center"
         >
           <Grid item>
-            <p style={{ fontSize: "28px", fontWeight: "900" }}>Lead yourself so you can lead others</p>
+            <Typography style={{ fontSize: "28px", fontWeight: "900" }}>Lead yourself so you can lead others</Typography>
           </Grid>
           <Grid item>
             <img src="img/three_icons.png" alt="lead yourself so you can lead others" width={1200} />
           </Grid>
 
           <Grid item>
-            <p style={{ fontSize: "20px", fontWeight: "100" }}>A self-directed program aimed at helping you understand yourself and your 'WHY' so that you can develop your self-care <br />
+            <Typography color="secondary" style={{ fontSize: "20px", fontWeight: "100" }}>A self-directed program aimed at helping you understand yourself and your 'WHY' so that you can develop your self-care <br />
               strategies and leadership skills! The 21 Day Lead Yourself Challenge has a proven track record for the development of your elements<br />
-              for success, and is a high accountability program where you 'get out what you put in'.</p>
+              for success, and is a high accountability program where you 'get out what you put in'.</Typography>
           </Grid>
         </Grid>
         <Box
@@ -244,7 +249,7 @@ export default function Home() {
           alignItems="center"
         >
           <Grid item>
-            <p style={{ fontSize: "28px", fontWeight: "900" }}><i>To enquire about our services click the button below</i></p>
+            <Typography sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>To enquire about our services click the button below</Typography>
           </Grid>
           <Grid item>
             <Button
@@ -256,11 +261,11 @@ export default function Home() {
               onClick={() => {
                 if (currentUserEmail === null) {
                   setSnackbarOpen(true);
-                }else{
-                  getUserProfile(currentUserEmail).then((res)=>{
-                    if(res.user.isPurchased===true){
+                } else {
+                  getUserProfile(currentUserEmail).then((res) => {
+                    if (res.user.isPurchased === true) {
                       handleClickOpen();
-                    }else{
+                    } else {
                       handleClick();
                     }
                   })
@@ -270,10 +275,9 @@ export default function Home() {
               ADD TO CART
             </Button>
           </Grid>
-          <Grid item>
-
-          </Grid>
         </Grid>
+
+
         <Box
           sx={{
             width: 360,
@@ -293,7 +297,7 @@ export default function Home() {
         horizontal: 'center'
       }} open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
-          PLEASE SIGN IN YOUR ACCOUNT
+          Please sign in your account first
         </Alert>
       </Snackbar>
     </section>

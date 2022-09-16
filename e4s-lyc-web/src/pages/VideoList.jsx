@@ -23,6 +23,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import PermissionDeclined from '../components/PermissionDeclined';
+
 
 
 // function Copyright() {
@@ -67,14 +69,17 @@ export default function VideoList() {
         setOpen(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleClose = (event, reason) => {
+        if (reason && reason == "backdropClick")
+            return;
+        myCloseModal();
+    }
 
     const [title, setTitle] = useState();
     const [msg, setMsg] = useState();
 
     const navigate = useNavigate();
+    
     const [searchParams] = useSearchParams();
     const paymentStatus = searchParams.get("pay");
 
@@ -93,9 +98,9 @@ export default function VideoList() {
                 setMsg("Please sign in to your account before visiting this page.");
                 handleClickOpen();
             } else {
-                getUserProfile(localStorage.getItem("currentUserEmail")).then((user) => {
-                    if (user.isPurchased !== true) {
-                        setTitle("Warning!!!!");
+                getUserProfile(localStorage.getItem("currentUserEmail")).then((res) => {
+                    if (res.user.isPurchased !== true) {
+                        setTitle("Warning!");
                         setMsg("Please visit this page after purchasing the service from the home page.");
                         handleClickOpen();
                     }
@@ -103,6 +108,12 @@ export default function VideoList() {
             }
         }
     }, [paymentStatus])
+
+    // if (open) {
+        // return (
+        //     <PermissionDeclined msg={msg} />
+        // )
+    // }
 
 
     return (
@@ -113,7 +124,7 @@ export default function VideoList() {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle color='primary' id="alert-dialog-title">
                     {title}
                 </DialogTitle>
                 <DialogContent>
@@ -125,7 +136,7 @@ export default function VideoList() {
                     <Button onClick={() => {
                         navigate('/');
                         handleClose();
-                    }} autoFocus>
+                    }} >
                         Bcak to home page
                     </Button>
                 </DialogActions>
@@ -187,9 +198,9 @@ export default function VideoList() {
             <Container sx={{ py: 4 }} maxWidth="md">
                 <Grid container spacing={4}>
                     {getVideoCardConfig().map((card, index) => (
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid key={card.title} item xs={12} sm={6} md={4}>
                             <CardActionArea
-                                onClick={() => navigate(`/video?day=${index}`)}
+                                onClick={() => navigate(`/video?day=${index + 1}`)}
                             >
                                 <Card
                                     sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
