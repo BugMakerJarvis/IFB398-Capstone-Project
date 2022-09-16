@@ -203,29 +203,50 @@ export default function VideoList() {
             <Container sx={{py: 4}} maxWidth="md">
                 <Grid container spacing={4}>
                     {getVideoCardConfig().map((card, index) => (
-                        <Grid key={card.title} item xs={12} sm={6} md={4}>
-                            <CardActionArea
-                                onClick={() => navigate(`/video?day=${index + 1}`)}
-                            >
-                                <Card
-                                    sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
+                        index < daysFromPayment ?
+                            <Grid key={card.title} item xs={12} sm={6} md={4}>
+                                <CardActionArea
+                                    onClick={() => navigate(`/video?day=${index + 1}`)}
                                 >
-                                    <CardMedia
-                                        component="img"
-                                        image="img/random.png"
-                                        alt="random"
-                                    />
-                                    <CardContent sx={{flexGrow: 1}}>
-                                        <Typography gutterBottom color="primary" variant="h5" component="h2">
-                                            {card.title}
-                                        </Typography>
-                                        <Typography color="secondary">
-                                            {card.info}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </CardActionArea>
-                        </Grid>
+                                    <Card
+                                        sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
+                                    >
+                                        <CardMedia
+                                            component="img"
+                                            image="img/random.png"
+                                            alt="random"
+                                        />
+                                        <CardContent sx={{flexGrow: 1}}>
+                                            <Typography gutterBottom color="primary" variant="h5" component="h2">
+                                                {card.title}
+                                            </Typography>
+                                            <Typography color="secondary">
+                                                {card.info}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </CardActionArea>
+                            </Grid> : <Grid key={card.title} item xs={12} sm={6} md={4}>
+                                <CardActionArea disabled>
+                                    <Card
+                                        sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
+                                    >
+                                        <CardMedia
+                                            component="img"
+                                            image="img/random.png"
+                                            alt="random"
+                                        />
+                                        <CardContent sx={{flexGrow: 1}}>
+                                            <Typography gutterBottom color="primary" variant="h5" component="h2">
+                                                {card.title}
+                                            </Typography>
+                                            <Typography color="secondary">
+                                                {card.info}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </CardActionArea>
+                            </Grid>
                     ))}
                 </Grid>
             </Container>

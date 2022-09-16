@@ -22,6 +22,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {getUserProfile} from '../services/auth';
+import moment from "moment";
 
 const theme = createTheme({
     palette: {
@@ -88,6 +89,18 @@ export default function Video() {
         }
     }, [paymentStatus])
 
+    const [daysFromPayment, setDaysFromPayment] = React.useState(1);
+
+    useEffect(() => {
+        getUserProfile(localStorage.getItem("currentUserEmail")).then((res) => {
+            if (res.user.paymentDate) {
+                const currentDate = moment().format('YYYY-MM-DD');
+                const paymentDate = moment(res.user.paymentDate).format('YYYY-MM-DD');
+                setDaysFromPayment(moment(currentDate).diff(paymentDate, 'day') + 1);
+            }
+        });
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <Dialog
@@ -152,40 +165,35 @@ export default function Video() {
                     }}
                 >
                     {videoConfig.map((card, index) => (
-                        <ListItem key={card.title}>
-                            {
-                                (day === index + 1)
-                                    ?
-                                    <ListItemButton
-                                        sx={{borderRadius: 5, border: 2, borderColor: '#52BD66'}}
-                                        onClick={() => navigate(`/video?day=${index + 1}`)}
-                                    >
-                                        <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
-                                        <ListItemText
-                                            primary={card.title}
-                                            secondary={card.info}
-                                            primaryTypographyProps={{
-                                                fontSize: 17,
-                                                fontWeight: 'bold',
-                                                color: "primary"
-                                            }}/>
-                                    </ListItemButton>
-                                    :
-                                    <ListItemButton
-                                        onClick={() => navigate(`/video?day=${index + 1}`)}
-                                    >
-                                        <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
-                                        <ListItemText
-                                            primary={card.title}
-                                            secondary={card.info}
-                                            primaryTypographyProps={{
-                                                fontSize: 17,
-                                                fontWeight: 'bold',
-                                                color: "primary"
-                                            }}/>
-                                    </ListItemButton>
-                            }
-                        </ListItem>
+                        index < daysFromPayment ?
+                            <ListItem key={card.title}>
+                                <ListItemButton
+                                    sx={day == index + 1 ? {borderRadius: 5, border: 2, borderColor: '#52BD66'} : null}
+                                    onClick={() => navigate(`/video?day=${index + 1}`)}
+                                >
+                                    <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
+                                    <ListItemText
+                                        primary={card.title}
+                                        secondary={card.info}
+                                        primaryTypographyProps={{
+                                            fontSize: 17,
+                                            fontWeight: 'bold',
+                                            color: "primary"
+                                        }}/>
+                                </ListItemButton>
+                            </ListItem> : <ListItem key={card.title}>
+                                <ListItemButton disabled>
+                                    <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
+                                    <ListItemText
+                                        primary={card.title}
+                                        secondary={card.info}
+                                        primaryTypographyProps={{
+                                            fontSize: 17,
+                                            fontWeight: 'bold',
+                                            color: "primary"
+                                        }}/>
+                                </ListItemButton>
+                            </ListItem>
                     ))}
                 </List>
             </Box>
