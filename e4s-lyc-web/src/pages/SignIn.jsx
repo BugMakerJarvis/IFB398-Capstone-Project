@@ -221,7 +221,7 @@ export default function SignInSide(props) {
                             <Link onClick={() => setForgetPasswordDialogOpen(true)} color="primary" fontWeight="bold">
                                 Forgot password?
                             </Link>
-                            {switchDialog == 1 ?
+                            {switchDialog === 1 ?
                                 <Dialog
                                     open={forgetPasswordDialogOpen}
                                     onClose={() => setForgetPasswordDialogOpen(false)}

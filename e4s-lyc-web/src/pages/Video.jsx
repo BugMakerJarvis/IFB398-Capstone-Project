@@ -1,14 +1,9 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -16,18 +11,17 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getVideoCardConfig } from "../config/video-config";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {getVideoCardConfig} from "../config/video-config";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {useState, useEffect} from 'react';
 import "../index.css"
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { updatePaymentStutus, updateUserProfile, getUserProfile } from '../services/auth';
+import {getUserProfile} from '../services/auth';
 
 const theme = createTheme({
     palette: {
@@ -58,11 +52,12 @@ export default function Video() {
         setOpen(true);
     };
 
-    const handleClose = (event, reason) => {
-        if (reason && reason == "backdropClick")
-            return;
-        myCloseModal();
-    }
+    // const handleClose = (event, reason) => {
+    //     // if (reason && reason === "backdropClick")
+    //     //     return;
+    //     // myCloseModal();
+    //     setOpen(false);
+    // }
 
     const [title, setTitle] = useState();
     const [msg, setMsg] = useState();
@@ -71,9 +66,7 @@ export default function Video() {
 
     useEffect(() => {
         if (paymentStatus === 'success') {
-            // const currentUserEmail = localStorage.getItem("currentUserEmail");
-            // const currentDate = new Date().toLocaleDateString();
-            // updatePaymentStutus(currentUserEmail, { 'isPurchased': true, 'paymentDate': currentDate });
+
         } else if (paymentStatus === 'fail') {
             setTitle("Payment failure");
             setMsg("Your payment has failed, please click the button below to return to the home page.");
@@ -99,7 +92,7 @@ export default function Video() {
         <ThemeProvider theme={theme}>
             <Dialog
                 open={open}
-                onClose={handleClose}
+                // onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -114,13 +107,13 @@ export default function Video() {
                 <DialogActions>
                     <Button onClick={() => {
                         navigate('/');
-                        handleClose();
-                    }} >
+                        // handleClose();
+                    }}>
                         Bcak to home page
                     </Button>
                 </DialogActions>
             </Dialog>
-            <CssBaseline />
+            <CssBaseline/>
             <Box
                 sx={{
                     // bgcolor: 'background.paper',
@@ -161,13 +154,13 @@ export default function Video() {
                     {videoConfig.map((card, index) => (
                         <ListItem key={card.title}>
                             {
-                                (day == index + 1)
+                                (day === index + 1)
                                     ?
                                     <ListItemButton
-                                        sx={{ borderRadius: 5, border: 2, borderColor: '#52BD66' }}
+                                        sx={{borderRadius: 5, border: 2, borderColor: '#52BD66'}}
                                         onClick={() => navigate(`/video?day=${index + 1}`)}
                                     >
-                                        <Avatar sx={{ mr: 2 }} alt="logo" src="img/logo.jpg" />
+                                        <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
                                         <ListItemText
                                             primary={card.title}
                                             secondary={card.info}
@@ -175,13 +168,13 @@ export default function Video() {
                                                 fontSize: 17,
                                                 fontWeight: 'bold',
                                                 color: "primary"
-                                            }} />
+                                            }}/>
                                     </ListItemButton>
                                     :
                                     <ListItemButton
                                         onClick={() => navigate(`/video?day=${index + 1}`)}
                                     >
-                                        <Avatar sx={{ mr: 2 }} alt="logo" src="img/logo.jpg" />
+                                        <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
                                         <ListItemText
                                             primary={card.title}
                                             secondary={card.info}
@@ -189,7 +182,7 @@ export default function Video() {
                                                 fontSize: 17,
                                                 fontWeight: 'bold',
                                                 color: "primary"
-                                            }} />
+                                            }}/>
                                     </ListItemButton>
                             }
                         </ListItem>
@@ -231,6 +224,6 @@ export default function Video() {
                     </Typography>
                 </Container>
             </Box>
-        </ThemeProvider >
+        </ThemeProvider>
     );
 }
