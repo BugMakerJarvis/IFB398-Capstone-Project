@@ -15,11 +15,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signInWithGoogle, signIn, resetPwd, forgetPwd } from '../services/auth'
+import { signInWithGoogle, signIn, resetPwd, forgetPwd, getUserProfile } from '../services/auth'
 import { useNavigate } from "react-router";
 import { Alert, Collapse, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
+import { collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
 
 function Copyright(props) {
     return (
@@ -208,7 +209,14 @@ export default function SignInSide(props) {
                             <Avatar alt="Google" src="img/Google.png" onClick={async () => {
                                 await signInWithGoogle()
                                     // .then(() => onChange(localStorage.getItem("currentUserName")))
-                                    .then(() => pushToHome());
+                                    .then(() => {
+                                        getUserProfile(localStorage.getItem("currentUserEmail")).then((res) => {
+                                            if (JSON.stringify(res.user) === "{}") {
+                                                addDoc(collection(getFirestore(), 'userProfile'), { email: localStorage.getItem("currentUserEmail") });
+                                            }
+                                        })
+                                        pushToHome()
+                                    });
                             }} />
                         </Button>
                         <Box
