@@ -185,8 +185,7 @@ export default function Video() {
                                 <ListItemButton disabled>
                                     <Avatar sx={{mr: 2}} alt="logo" src="img/logo.jpg"/>
                                     <ListItemText
-                                        primary={card.title}
-                                        secondary={card.info}
+                                        primary={"comming soon~"}
                                         primaryTypographyProps={{
                                             fontSize: 17,
                                             fontWeight: 'bold',

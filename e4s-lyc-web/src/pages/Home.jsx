@@ -129,15 +129,15 @@ export default function Home() {
   };
   const currentUserEmail = localStorage.getItem("currentUserEmail");
 
-  // useEffect(() => {
-  //   if (currentUserEmail !== null) {
-  //     getUserProfile(currentUserEmail).then((res) => {
-  //       if (res.user.isPurchased === true) {
-  //         handleClickOpen();
-  //       }
-  //     })
-  //   }
-  // }, [currentUserEmail]);
+  const [isPurchased, setIsPurchased] = useState(false);
+
+  useEffect(() => {
+    getUserProfile(currentUserEmail).then((res) => {
+      if (res.user.isPurchased) {
+        setIsPurchased(res.user.isPurchased);
+      }
+    })
+  }, []);
 
   return (
     <section className="hero">
@@ -154,7 +154,7 @@ export default function Home() {
           // dividers
           >
             <Typography gutterBottom>
-              You have already purchased this service, enjoy the video now! Click the button below to go to the video page, or close this dialog box.
+              Enjoy the video now! Click the button below to go to the video page, or close this dialog box.
             </Typography>
           </DialogContent>
           <DialogActions>
@@ -240,42 +240,69 @@ export default function Home() {
             border: "none",
           }}
         />
-
-        <Grid
-          container
-          direction="column"
-          justifyContent="space-around"
-          spacing={3}
-          alignItems="center"
-        >
-          <Grid item>
-            <Typography sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>To enquire about our services click the button below</Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              color="primary"
-              size="large"
-              type="submit"
-              variant="contained"
-              sx={{ mt: 4 }}
-              onClick={() => {
-                if (currentUserEmail === null) {
-                  setSnackbarOpen(true);
-                } else {
-                  getUserProfile(currentUserEmail).then((res) => {
-                    if (res.user.isPurchased === true) {
-                      handleClickOpen();
-                    } else {
-                      handleClick();
+        {
+          isPurchased !== true ?
+            <Grid
+              container
+              direction="column"
+              justifyContent="space-around"
+              spacing={3}
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography
+                  sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>
+                  To purchase our service click the button below</Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  color="primary"
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 4 }}
+                  onClick={() => {
+                    if (currentUserEmail === null) {
+                      setSnackbarOpen(true);
                     }
-                  })
-                }
-                // handleClick()
-              }}>
-              ADD TO CART
-            </Button>
-          </Grid>
-        </Grid>
+                  }}>
+                  ADD TO CART
+                </Button>
+              </Grid>
+            </Grid> :
+            <Grid
+              container
+              direction="column"
+              justifyContent="space-around"
+              spacing={3}
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography
+                  sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>
+                  Congratulation!
+                  </Typography>
+                  <Typography
+                  sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>
+                  You have purchased the service successfully!
+                  </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  color="primary"
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 4 }}
+                  onClick={() => {
+                    navigate('/videolist');
+                  }}>
+                  VIEW VIDEO LIST
+                </Button>
+              </Grid>
+            </Grid>
+        }
+
 
 
         <Box
