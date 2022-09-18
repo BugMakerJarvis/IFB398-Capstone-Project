@@ -3,6 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 // import LoadingButton from '@mui/lab/LoadingButton';
 import CssBaseline from '@mui/material/CssBaseline';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
@@ -102,35 +104,39 @@ export default function SignInSide(props) {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Grid container component="main" sx={{ height: '80vh', marginTop: "30px" }}>
-                <Grid
-                    component={Paper}
-                    item
-                    xs={false}
-                    sm={4}
-                    md={4.5}
+            <Box
+                sx={{
+
+                    pb: 6,
+                    mt: 5,
+                    display: 'flex',
+                    justifyContent: "center"
+                }}
+            >
+                <Card
                     sx={{
-                        ml: 30,
-                        // backgroundImage: 'url(https://source.unsplash.com/random)',
-                        backgroundImage: 'url(img/High-Performance-Workshops-1.jpg)',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
+                        width: 660,
+                        height: 720,
+                        borderRadius: 1,
                     }}
-                />
-                <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
+                >
+                    <CardMedia
+                        component="img"
+                        image='img/High-Performance-Workshops-1.jpg'
+                        alt="signin"
+                    />
+                </Card>
+                <Box sx={{ width: 580 }} component={Paper} elevation={6} square>
                     <Box
                         sx={{
-                            my: 8,
-                            mx: 8,
+                            my: 10,
+                            mx: 10,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="primary" mt={4} mb={4} component="h1" variant="h4">
+                        <Typography color="primary" mt={2} mb={2} component="h1" variant="h4">
                             Sign In to Your Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
@@ -151,7 +157,7 @@ export default function SignInSide(props) {
                                 {errorMessage}
                             </Alert>
                         </Collapse>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
                             <TextField
                                 margin="normal"
                                 color="primary"
@@ -202,7 +208,7 @@ export default function SignInSide(props) {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="secondary" mb={1} component='span' variant="body1">
+                        <Typography color="secondary" component='span' variant="body1">
                             You can also sign in with:
                         </Typography>
                         <Button>
@@ -323,8 +329,9 @@ export default function SignInSide(props) {
                         </Box>
                     </Box>
                     <Copyright sx={{ mt: 5 }} />
-                </Grid>
-            </Grid>
+                </Box>
+            </Box>
+
         </ThemeProvider >
     );
 }

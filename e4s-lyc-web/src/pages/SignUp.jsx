@@ -4,14 +4,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {register} from "../services/auth";
-import {useNavigate} from "react-router";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { register } from "../services/auth";
+import { useNavigate } from "react-router";
 import {
     Alert,
     Collapse,
@@ -23,14 +25,14 @@ import {
     IconButton
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {useState} from "react";
+import { useState } from "react";
 import {
     getFirestore,
     collection,
     addDoc,
     serverTimestamp,
 } from 'firebase/firestore';
-import {getAuth} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 function Copyright(props) {
     return (
@@ -113,44 +115,52 @@ export default function SignUpSide() {
                     setVerificationDialogOpen(true);
                 })
                 .catch((error) => {
-                        setErrorMessage(error.message);
-                        setErrorAlertOpen(true);
-                    }
+                    setErrorMessage(error.message);
+                    setErrorAlertOpen(true);
+                }
                 );
         }
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{height: '80vh',marginTop:"30px"}}>
-                <CssBaseline/>
-                <Grid item xs={12} sm={8} md={4} ml={30} component={Paper} elevation={6} square>
+            <CssBaseline />
+            <Box
+                sx={{
+                    pb: 6,
+                    mt: 5,
+                    display: 'flex',
+                    justifyContent: "center"
+                }}
+            >
+
+                <Box sx={{ width: 580 }} component={Paper} elevation={6} square>
                     <Box
                         sx={{
-                            my: 8,
-                            mx: 8,
+                            my: 10,
+                            mx: 10,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="primary" mt={4} mb={4} component="h1" variant="h4">
+                        <Typography color="primary" mt={2} mb={4} component="h1" variant="h4">
                             Create Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
-                            <Alert severity="error" sx={{mb: 2}}
-                                   action={
-                                       <IconButton
-                                           aria-label="close"
-                                           color="inherit"
-                                           size="small"
-                                           onClick={() => {
-                                               setErrorAlertOpen(false);
-                                           }}
-                                       >
-                                           <CloseIcon fontSize="inherit"/>
-                                       </IconButton>
-                                   }
+                            <Alert severity="error" sx={{ mb: 2 }}
+                                action={
+                                    <IconButton
+                                        aria-label="close"
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() => {
+                                            setErrorAlertOpen(false);
+                                        }}
+                                    >
+                                        <CloseIcon fontSize="inherit" />
+                                    </IconButton>
+                                }
                             >
                                 {errorMessage}
                             </Alert>
@@ -176,7 +186,7 @@ export default function SignUpSide() {
                                 }}>OK</Button>
                             </DialogActions>
                         </Dialog>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -226,7 +236,7 @@ export default function SignUpSide() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControlLabel
-                                        control={<Checkbox name="receiveEmail" color="primary"/>}
+                                        control={<Checkbox name="receiveEmail" color="primary" />}
                                         label="I want to receive inspiration and updates via email."
                                     />
                                 </Grid>
@@ -237,7 +247,7 @@ export default function SignUpSide() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{mt: 4, mb: 2}}
+                                sx={{ mt: 2, mb: 2 }}
                             >
                                 Sign Up
                             </Button>
@@ -250,24 +260,23 @@ export default function SignUpSide() {
                             </Grid>
                         </Box>
                     </Box>
-                </Grid>
-                <Grid
-                    item
-                    component={Paper}
-                    xs={false}
-                    sm={7}
-                    md={4.5}
+                    <Copyright sx={{ mt: 5 }} />
+                </Box>
+                <Card
                     sx={{
-                        // backgroundImage: 'url(https://source.unsplash.com/random)',
-                        backgroundImage: 'url(img/IMG20210510162140.jpg)',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
+                        width: 660,
+                        height: 720,
+                        borderRadius: 1,
                     }}
-                />
-            </Grid>
+                >
+                    <CardMedia
+                        component="img"
+                        image='img/signup.jpg'
+                        alt="signup"
+                    />
+                </Card>
+            </Box>
+
         </ThemeProvider>
     );
 }

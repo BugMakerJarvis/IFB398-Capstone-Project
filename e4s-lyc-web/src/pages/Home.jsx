@@ -241,7 +241,7 @@ export default function Home() {
           }}
         />
         {
-          isPurchased !== true ?
+          (isPurchased !== true) || (currentUserEmail === null) ?
             <Grid
               container
               direction="column"
@@ -281,11 +281,11 @@ export default function Home() {
                 <Typography
                   sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>
                   Congratulation!
-                  </Typography>
-                  <Typography
+                </Typography>
+                <Typography
                   sx={{ fontStyle: "italic", fontSize: "28px", fontWeight: "900" }}>
                   You have purchased the service successfully!
-                  </Typography>
+                </Typography>
               </Grid>
               <Grid item>
                 <Button
