@@ -262,8 +262,10 @@ export default function Home() {
                   variant="contained"
                   sx={{ mt: 4 }}
                   onClick={() => {
-                    if (currentUserEmail === null) {
+                    if (!currentUserEmail) {
                       setSnackbarOpen(true);
+                    }else{
+                      handleClick();
                     }
                   }}>
                   ADD TO CART
