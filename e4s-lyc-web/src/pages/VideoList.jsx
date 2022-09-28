@@ -195,7 +195,7 @@ export default function VideoList() {
                                 window.open("https://firebasestorage.googleapis.com/v0/b/e4s-lyc-web-f1383.appspot.com/o/Lead%20Yourself%20Challenge.pdf?alt=media&token=78a084f5-2bf7-4486-9823-c81471e9c2a8")
                             }}>
                             <DownloadIcon sx={{ mr: 1 }} />
-                            Download pdf decument
+                            Download pdf document
                         </Button>
                     </Stack>
                 </Container>
@@ -238,7 +238,7 @@ export default function VideoList() {
                                         />
                                         <CardContent sx={{ flexGrow: 1 }}>
                                             <Typography gutterBottom color="primary" variant="h5" component="h2">
-                                                {"comming soon"}
+                                                {"coming soon"}
                                             </Typography>
                                         </CardContent>
                                     </Card>
