@@ -111,7 +111,7 @@ export default function SignUpSide() {
                     localStorage.setItem("currentUserName", `${firstName} ${lastName}`)
                 })
                 .then(() => {
-                    setVerificationMessage(`We've sent an email to ${email}, you can verify your email address now.`);
+                    setVerificationMessage(`We've sent an email to ${email}, you can verify your email address now. If you haven't received the email, please check your spam folder.`);
                     setVerificationDialogOpen(true);
                 })
                 .catch((error) => {

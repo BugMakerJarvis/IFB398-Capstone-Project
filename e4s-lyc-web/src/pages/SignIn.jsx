@@ -309,6 +309,9 @@ export default function SignInSide(props) {
                                         <DialogContentText id="alert-dialog-description">
                                             {`We've sent an email to ${emailForPassword}, you can reset your password via the email.`}
                                         </DialogContentText>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {`If you haven't received the email, please check your spam folder.`}
+                                        </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
                                         <Button

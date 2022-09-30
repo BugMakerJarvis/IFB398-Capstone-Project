@@ -15,13 +15,13 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from "@mui/material/Button";
-import {getUserName, getUserProfile, resetPwd, signOutUser, updateUserProfile} from "../services/auth";
-import {useNavigate} from "react-router";
-import {Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar} from "@mui/material";
-import {useEffect, useState} from "react";
-import {addDoc, collection, getFirestore, serverTimestamp} from "firebase/firestore";
+import { getUserName, getUserProfile, resetPwd, signOutUser, updateUserProfile } from "../services/auth";
+import { useNavigate } from "react-router";
+import { Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from "@mui/material";
+import { useEffect, useState } from "react";
+import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
 
 
 const theme = createTheme({
@@ -53,7 +53,7 @@ const theme = createTheme({
 });
 
 function TabPanel(props) {
-    const {children, value, index, ...other} = props;
+    const { children, value, index, ...other } = props;
 
     return (
         <div
@@ -64,7 +64,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{p: 3}}>
+                <Box sx={{ p: 3 }}>
                     {children}
                 </Box>
             )}
@@ -101,7 +101,7 @@ export default function SettingsPage() {
 
     const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
 
-    const label = {inputProps: {'aria-label': 'Switch demo'}};
+    const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const [receiveEmail, setReceiveEmail] = useState(false);
 
@@ -154,7 +154,7 @@ export default function SettingsPage() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box mt={4} sx={{width: '100%' }}>
+            <Box mt={4} sx={{ width: '100%' }}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
                     </Grid>
@@ -173,28 +173,28 @@ export default function SettingsPage() {
                 </Grid>
             </Box>
 
-            <Box sx={{minHeight: "60vh"}}>
+            <Box sx={{ minHeight: "60vh" }}>
                 <TabPanel value={value} index={0}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="primary" variant="h6" component="span">
                                 Profile Settings
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="span">
                                 Change identifying details for your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
 
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={10}>
-                            <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={1}>
+                            <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={1}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1" component="span">
                                     Display Name
                                 </Typography>
@@ -216,9 +216,9 @@ export default function SettingsPage() {
                                 height="auto"
                                 component="form"
                                 noValidate
-                                // onSubmit={handleSubmit}
+                            // onSubmit={handleSubmit}
                             >
-                                <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={1}>
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={1}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Pronoun preference
                                     </Typography>
@@ -236,7 +236,7 @@ export default function SettingsPage() {
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12} ml={2} sx={{display: "flex", justifyContent: "flex-start"}} p={1}>
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", justifyContent: "flex-start" }} p={1}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Bio
                                     </Typography>
@@ -254,15 +254,15 @@ export default function SettingsPage() {
                                 </Grid>
 
                                 <Grid item xs={12} display="flex"
-                                      justifyContent="flex-end"
-                                      alignItems="flex-end" mr={5} mb={3}>
+                                    justifyContent="flex-end"
+                                    alignItems="flex-end" mr={5} mb={3}>
                                     <Button
                                         color="primary"
                                         size="large"
                                         variant="contained"
                                         onClick={async () => {
                                             try {
-                                                const res = await updateUserProfile(currentUserEmail, {bio, pronoun});
+                                                const res = await updateUserProfile(currentUserEmail, { bio, pronoun });
                                                 setSnackbarOpen(true);
                                             } catch (error) {
                                                 setSnackbarMsg("An error occurred when updating user profile!")
@@ -281,24 +281,24 @@ export default function SettingsPage() {
 
                 <TabPanel value={value} index={1}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="primary" variant="h6" component="div">
                                 Contact
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Where we send important messages about your account
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
-                            <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                            <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
                                 <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                     Email
                                 </Typography>
@@ -319,45 +319,45 @@ export default function SettingsPage() {
                     </Grid>
 
                     <Grid container spacing={2} mt={5}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="primary" variant="h6" component="div">
                                 Security
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Keep your account safe and sound
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
                         <Grid item sx={{
                             height: 'auto',
                             backgroundColor: "rgba(255,255,255,0.2)"
                         }} xs={8} component={Paper} elevation={20}>
                             {!isSignedInByPwd ?
-                                <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Password
                                     </Typography>
-                                    <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
-                                        <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
+                                    <Grid item xs={12} ml={3} sx={{ display: "flex", alignItems: "center" }}>
+                                        <Grid item xs={12} ml={3} sx={{ display: "flex", alignItems: "center" }}>
                                             <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
                                                 You can't change your password here by logging in with Google account.
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                 </Grid> : (isEmailVerified ?
-                                    <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                    <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
                                         <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                             Password
                                         </Typography>
                                         <Grid item xs={4} ml={3} mb={3}>
                                             <Link href="#" color="primary" fontWeight="bold"
-                                                  onClick={() => resetPwd(currentUserEmail).then(() => signOutUser().then(() => {
-                                                      setVerificationDialogOpen(true);
-                                                  }))}>
+                                                onClick={() => resetPwd(currentUserEmail).then(() => signOutUser().then(() => {
+                                                    setVerificationDialogOpen(true);
+                                                }))}>
                                                 Change password
                                             </Link>
                                             <Dialog
@@ -373,6 +373,9 @@ export default function SettingsPage() {
                                                     <DialogContentText id="alert-dialog-description">
                                                         {`We've sent an email to ${currentUserEmail}, you can reset your password via the email.`}
                                                     </DialogContentText>
+                                                    <DialogContentText id="alert-dialog-description">
+                                                        {`If you haven't received the email, please check your spam folder.`}
+                                                    </DialogContentText>
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={() => {
@@ -383,19 +386,19 @@ export default function SettingsPage() {
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
-                                        <Grid item xs={12} sx={{display: "flex", alignItems: "center"}}>
+                                        <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
                                             <Typography color="secondary" fontWeight="bold" mb={3} variant="body1"
                                             >
                                                 Improve your security with a strong password.
                                             </Typography>
                                         </Grid>
                                     </Grid> :
-                                    <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                    <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
                                         <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                             Password
                                         </Typography>
-                                        <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
-                                            <Grid item xs={12} ml={3} sx={{display: "flex", alignItems: "center"}}>
+                                        <Grid item xs={12} ml={3} sx={{ display: "flex", alignItems: "center" }}>
+                                            <Grid item xs={12} ml={3} sx={{ display: "flex", alignItems: "center" }}>
                                                 <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
                                                     You can't change your password here because you haven't verify your
                                                     email.
@@ -411,19 +414,19 @@ export default function SettingsPage() {
                 {/* tab3 */}
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="primary" variant="h6" component="div">
                                 Notifications
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
-                        <Grid item xs={10} sx={{display: "flex", alignItems: "center"}}>
+                        <Grid item xs={2} />
+                        <Grid item xs={10} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography color="secondary" mb={3} variant="subtitle1" component="div">
                                 Get notifications you care about. We may notify you about updates to your account.
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}/>
+                        <Grid item xs={2} />
 
                         <Grid item sx={{
                             height: 'auto',
@@ -433,17 +436,17 @@ export default function SettingsPage() {
                             <Box
                                 component="form"
                                 noValidate
-                                // onSubmit={handleSubmit}
+                            // onSubmit={handleSubmit}
                             >
-                                <Grid item xs={12} ml={2} sx={{display: "flex", alignItems: "center"}} p={2}>
+                                <Grid item xs={12} ml={2} sx={{ display: "flex", alignItems: "center" }} p={2}>
                                     <Typography color="black" fontWeight="bold" mb={3} variant="body1">
                                         Message
                                     </Typography>
 
                                     <Grid item xs={1} mx={2} mb={3}>
-                                        <Switch {...label} checked={receiveEmail} onChange={handleReceiveEmailChange}/>
+                                        <Switch {...label} checked={receiveEmail} onChange={handleReceiveEmailChange} />
                                     </Grid>
-                                    <Grid item xs={12} sx={{display: "flex", alignItems: "center"}}>
+                                    <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
                                         <Typography color="secondary" fontWeight="bold" mb={3} variant="body1">
                                             When turned off, you won't get any more news from us.
                                         </Typography>
@@ -451,8 +454,8 @@ export default function SettingsPage() {
 
                                 </Grid>
                                 <Grid item display="flex"
-                                      justifyContent="flex-end"
-                                      alignItems="flex-end" xs={12} mr={5} mb={3}>
+                                    justifyContent="flex-end"
+                                    alignItems="flex-end" xs={12} mr={5} mb={3}>
                                     <Button
                                         color="primary"
                                         size="large"
@@ -460,7 +463,7 @@ export default function SettingsPage() {
                                         variant="contained"
                                         onClick={async () => {
                                             try {
-                                                const res = await updateUserProfile(currentUserEmail, {receiveEmail: receiveEmail});
+                                                const res = await updateUserProfile(currentUserEmail, { receiveEmail: receiveEmail });
                                                 setSnackbarOpen(true);
                                             } catch (error) {
                                                 setSnackbarMsg("An error occurred when updating user profile!");
@@ -482,7 +485,7 @@ export default function SettingsPage() {
                 vertical: 'top',
                 horizontal: 'center'
             }} open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-                <Alert onClose={handleSnackbarClose} severity={snackbarState} sx={{width: '100%'}}>
+                <Alert onClose={handleSnackbarClose} severity={snackbarState} sx={{ width: '100%' }}>
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
