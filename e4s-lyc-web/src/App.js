@@ -12,8 +12,7 @@ import SignUp from "./pages/SignUp";
 import Video from "./pages/Video";
 import SettingsPage from "./pages/SettingsPage";
 import VideoList from "./pages/VideoList";
-import {useState} from "react";
-import Settings from "@mui/icons-material/Settings";
+
 
 
 function App() {
