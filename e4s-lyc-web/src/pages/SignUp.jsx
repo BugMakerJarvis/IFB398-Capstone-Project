@@ -99,7 +99,7 @@ export default function SignUpSide() {
         } else {
             await register(email, password, firstName, lastName)
                 .then(async (userCredential) => {
-                    await addDoc(collection(getFirestore(), 'userProfile'), {
+                    await addDoc(collection(getFirestore(), 'users'), {
                         uid: userCredential.user.uid,
                         email: email,
                         firstName: firstName,
