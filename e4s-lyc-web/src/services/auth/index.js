@@ -132,7 +132,7 @@ export async function forgetPwd(email) {
 }
 
 export async function getUserProfile(email) {
-    const q = query(collection(getFirestore(), 'users'), where("email", "==", email));
+    const q = query(collection(getFirestore(), 'userProfile'), where("email", "==", email));
 
     const querySnapshot = await getDocs(q);
     let user = {};
@@ -148,9 +148,9 @@ export async function getUserProfile(email) {
 export async function updateUserProfile(email, data) {
     const res = await getUserProfile(email);
     if (JSON.stringify(res.user) === "{}") {
-        await addDoc(collection(getFirestore(), 'users'), {email: email, ...data})
+        await addDoc(collection(getFirestore(), 'userProfile'), {email: email, ...data})
     } else {
-        const docRef = doc(getFirestore(), "users", res.pathSegments);
+        const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
         await updateDoc(docRef, data);
     }
 }
@@ -159,9 +159,9 @@ export async function updatePaymentStutus(email, data) {
     const res = await getUserProfile(email);
     if (JSON.stringify(res.user) === "{}") {
         console.log("sd")
-        await addDoc(collection(getFirestore(), 'users'), {email: email, ...data})
+        await addDoc(collection(getFirestore(), 'userProfile'), {email: email, ...data})
     } else {
-        const docRef = doc(getFirestore(), "users", res.pathSegments);
+        const docRef = doc(getFirestore(), "userProfile", res.pathSegments);
         await updateDoc(docRef, data);
     }
 }

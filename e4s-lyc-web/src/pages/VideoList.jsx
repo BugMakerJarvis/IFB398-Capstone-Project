@@ -180,7 +180,10 @@ export default function VideoList() {
                         spacing={2}
                         justifyContent="center"
                     >
-                        <Button
+                        <Typography variant="h5" align="center" color="secondary" >
+                            Let's start by
+                        </Typography>
+                        {/* <Button
                             variant="contained"
                             size='large'
                             onClick={() => {
@@ -188,9 +191,9 @@ export default function VideoList() {
                             }}
                         >
                             <MovieIcon sx={{ mr: 1 }} />
-                            Watch Intro Video</Button>
+                            Watch Intro Video</Button> */}
                         <Button
-                            variant="outlined"
+                            variant="contained"
                             onClick={() => {
                                 window.open("https://firebasestorage.googleapis.com/v0/b/e4s-lyc-web-f1383.appspot.com/o/Lead%20Yourself%20Challenge.pdf?alt=media&token=78a084f5-2bf7-4486-9823-c81471e9c2a8")
                             }}>
@@ -198,9 +201,13 @@ export default function VideoList() {
                             Download pdf document
                         </Button>
                     </Stack>
+
                 </Container>
             </Box>
             <Container sx={{ py: 4 }} maxWidth="md">
+                <Typography sx={{ mb: 4 }} variant="h5" align="center" color="secondary" >
+                    The video will be released by days, hope you enjoy the course!
+                </Typography>
                 <Grid container spacing={4}>
                     {getVideoCardConfig().map((card, index) => (
                         index < daysFromPayment ?
