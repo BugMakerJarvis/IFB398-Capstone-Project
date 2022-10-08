@@ -33,6 +33,8 @@ import {
     serverTimestamp,
 } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
+import TermsAndConditions from "../components/TermsAndConditions";
+import PrivacyPolicy from '../components/PrivacyPolicy';
 
 function Copyright(props) {
     return (
@@ -55,7 +57,8 @@ const theme = createTheme({
                     textDecoration: "none",
                     ":hover": {
                         textDecoration: "underline",
-                        color: "#52BD66"
+                        color: "#52BD66",
+                        cursor: "pointer"
                     },
                 },
             },
@@ -85,6 +88,30 @@ export default function SignUpSide() {
 
     const [verificationDialogOpen, setVerificationDialogOpen] = useState(false);
     const [verificationMessage, setVerificationMessage] = useState("");
+    // term
+    const [termsDialogOpen, setTermsDialogOpen] = React.useState(false);
+    const [termsScroll, setTermsScroll] = React.useState('paper');
+
+    const handleClickTermsDialogOpen = (scrollType) => () => {
+        setTermsDialogOpen(true);
+        setTermsScroll(scrollType);
+    };
+
+    const handleTermsDialogClose = () => {
+        setTermsDialogOpen(false);
+    };
+    //privacy
+    const [privacyDialogOpen, setPrivacyDialogOpen] = React.useState(false);
+    const [privacyScroll, setPrivacyScroll] = React.useState('paper');
+
+    const handleClickPrivacyDialogOpen = (scrollType) => () => {
+        setPrivacyDialogOpen(true);
+        setPrivacyScroll(scrollType);
+    };
+
+    const handlePrivacyDialogClose = () => {
+        setPrivacyDialogOpen(false);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -137,18 +164,18 @@ export default function SignUpSide() {
                 <Box sx={{ width: 580 }} component={Paper} elevation={6} square>
                     <Box
                         sx={{
-                            my: 10,
+                            my: 5,
                             mx: 10,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="primary" mt={2} mb={4} component="h1" variant="h4">
+                        <Typography color="primary" mt={2} mb={2} component="h1" variant="h4">
                             Create Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
-                            <Alert severity="error" sx={{ mb: 2 }}
+                            <Alert severity="error"
                                 action={
                                     <IconButton
                                         aria-label="close"
@@ -186,7 +213,7 @@ export default function SignUpSide() {
                                 }}>OK</Button>
                             </DialogActions>
                         </Dialog>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -239,6 +266,55 @@ export default function SignUpSide() {
                                         control={<Checkbox name="receiveEmail" color="primary" />}
                                         label="I want to receive inspiration and updates via email."
                                     />
+                                    {/* term */}
+                                    <Dialog
+                                        open={termsDialogOpen}
+                                        onClose={handleTermsDialogClose}
+                                        scroll={termsScroll}
+                                        aria-labelledby="scroll-dialog-title"
+                                        aria-describedby="scroll-dialog-description"
+                                    >
+                                        <DialogTitle color="primary" id="scroll-dialog-title">MOBILE APP TERMS AND CONDITIONS OF USE - SERVICES</DialogTitle>
+                                        <DialogContent dividers={termsScroll === 'paper'}>
+                                            <DialogContentText
+                                                id="scroll-dialog-description"
+                                                tabIndex={-1}
+                                                color="black"
+                                            >
+                                                PLEASE READ THESE TERMS AND CONDITIONS ('TERMS') CAREFULLY BEFORE USING THE APPLICATION
+                                                <TermsAndConditions />
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleTermsDialogClose}>Confirm</Button>
+                                        </DialogActions>
+                                    </Dialog>
+
+                                    {/* privacy */}
+                                    <Dialog
+                                        open={privacyDialogOpen}
+                                        onClose={handlePrivacyDialogClose}
+                                        scroll={privacyScroll}
+                                        aria-labelledby="scroll-dialog-title"
+                                        aria-describedby="scroll-dialog-description"
+                                    >
+                                        <DialogTitle color="primary" id="scroll-dialog-title">Privacy policy</DialogTitle>
+                                        <DialogContent dividers={privacyScroll === 'paper'}>
+                                            <DialogContentText
+                                                id="scroll-dialog-description"
+                                                tabIndex={-1}
+                                                color="black"
+                                            >
+                                            <PrivacyPolicy />
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handlePrivacyDialogClose}>Confirm</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                    <Typography component='div' sx={{ ml: 1 }} color="secondary" align="left">
+                                        By <Box component="span" fontWeight='bold'>Creating an account</Box>, you agree that you've read and accepted our <Link onClick={handleClickTermsDialogOpen('paper')}>Terms & Conditions</Link>, and you consent to our <Link onClick={handleClickPrivacyDialogOpen('paper')}>Privacy Policy</Link> from us.
+                                    </Typography>
                                 </Grid>
                             </Grid>
                             <Button

@@ -138,7 +138,7 @@ export default function SignInSide(props) {
                             Sign In to Your Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
-                            <Alert severity="error" sx={{ mb: 2 }}
+                            <Alert severity="error"
                                 action={
                                     <IconButton
                                         aria-label="close"
@@ -158,7 +158,7 @@ export default function SignInSide(props) {
                         <Box
                             component="form"
                             noValidate onSubmit={handleSubmit}
-                            sx={{ mt: 3 }}>
+                            sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
                                 color="primary"
@@ -187,7 +187,7 @@ export default function SignInSide(props) {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3 }}
+                                sx={{ mt: 1 }}
                             >
                                 Sign In
                             </Button>
