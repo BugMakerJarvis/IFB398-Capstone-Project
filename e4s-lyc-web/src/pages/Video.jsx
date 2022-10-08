@@ -23,6 +23,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {getUserProfile} from '../services/auth';
 import moment from "moment";
+import {getStreamSignedToken} from "../services/stream";
 
 const theme = createTheme({
     palette: {
@@ -48,6 +49,8 @@ export default function Video() {
     const day = searchParams.get("day");
 
     const [open, setOpen] = React.useState(false);
+
+    const [token, setToken] = React.useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -87,7 +90,12 @@ export default function Video() {
                 })
             }
         }
-    }, [paymentStatus])
+
+        // get token
+        getStreamSignedToken(day).then((data) => {
+            setToken(data.result.token);
+        });
+    }, [paymentStatus, day])
 
     const [daysFromPayment, setDaysFromPayment] = React.useState(1);
 
@@ -151,7 +159,8 @@ export default function Video() {
                         autoPlay
                         controls
                         allowFullScreen
-                        src={videoConfig[day - 1].videoLink}
+                        // src={videoConfig[day - 1].videoLink}
+                        src={`https://customer-8bro4htdkojvgl0i.cloudflarestream.com/${token}/iframe`}
                     />
                 </Card>
                 <List
