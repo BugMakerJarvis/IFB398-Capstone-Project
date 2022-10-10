@@ -24,6 +24,6 @@ export async function getStreamSignedToken(index) {
             body: JSON.stringify(signed_url_restrictions)
         }).then((res) => res.json());
     } catch (e) {
-        console.log("An error occurred when getting the stream's signed token.");
+        console.log("An error occurred when getting the stream's signed token.", e);
     }
 }
