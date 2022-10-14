@@ -126,7 +126,7 @@ export default function SignUpSide() {
         } else {
             await register(email, password, firstName, lastName)
                 .then(async (userCredential) => {
-                    await addDoc(collection(getFirestore(), 'users'), {
+                    await addDoc(collection(getFirestore(), 'userProfile'), {
                         uid: userCredential.user.uid,
                         email: email,
                         firstName: firstName,
@@ -313,7 +313,7 @@ export default function SignUpSide() {
                                         </DialogActions>
                                     </Dialog>
                                     <Typography component='div' sx={{ ml: 1 }} color="secondary" align="left">
-                                        By <Box component="span" fontWeight='bold'>Creating an account</Box>, you agree that you've read and accepted our <Link onClick={handleClickTermsDialogOpen('paper')}>Terms & Conditions</Link>, and you consent to our <Link onClick={handleClickPrivacyDialogOpen('paper')}>Privacy Policy</Link> from us.
+                                        By <Box component="span" fontWeight='bold'>Creating an account</Box>, you agree that you've read and accepted our <Link onClick={handleClickTermsDialogOpen('paper')}>Terms & Conditions</Link>, and you consent to <Link onClick={handleClickPrivacyDialogOpen('paper')}>Privacy Policy</Link> from us.
                                     </Typography>
                                 </Grid>
                             </Grid>
