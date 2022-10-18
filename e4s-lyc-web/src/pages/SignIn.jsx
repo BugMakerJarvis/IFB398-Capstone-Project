@@ -134,7 +134,7 @@ export default function SignInSide(props) {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography color="primary" mt={3} mb={3} component="h1" variant="h4">
+                        <Typography color="primary" mb={3} component="h1" variant="h4">
                             Sign In to Your Account
                         </Typography>
                         <Collapse in={errorAlertOpen}>
@@ -158,7 +158,7 @@ export default function SignInSide(props) {
                         <Box
                             component="form"
                             noValidate onSubmit={handleSubmit}
-                            sx={{ mt: 1 }}>
+                            >
                             <TextField
                                 margin="normal"
                                 color="primary"
@@ -187,7 +187,7 @@ export default function SignInSide(props) {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 1 }}
+                                sx={{ mt: 2 }}
                             >
                                 Sign In
                             </Button>
@@ -200,10 +200,10 @@ export default function SignInSide(props) {
                             alignItems: 'center',
                         }}
                     >
-                        {/* <Typography color="secondary" component='span' variant="body1">
+                        <Typography color="secondary" component='span' variant="body1">
                             You can also sign in with:
-                        </Typography> */}
-                        {/* <Button>
+                        </Typography>
+                        <Button>
                             <Avatar alt="Google" src="img/Google.png" onClick={async () => {
                                 await signInWithGoogle()
                                     // .then(() => onChange(localStorage.getItem("currentUserName")))
@@ -216,7 +216,7 @@ export default function SignInSide(props) {
                                         pushToHome()
                                     });
                             }} />
-                        </Button> */}
+                        </Button>
                         <Link onClick={() => setForgetPasswordDialogOpen(true)} color="primary" fontWeight="bold">
                             Forgot password?
                         </Link>
@@ -311,11 +311,11 @@ export default function SignInSide(props) {
                             </Dialog>
                         }
 
-                        <Link sx={{ mt: 2 }} href="/signup" color="primary" fontWeight="bold">
+                        <Link href="/signup" color="primary" fontWeight="bold">
                             Don't have an account? Sign Up
                         </Link>
                     </Box>
-                    <Copyright sx={{ mt: 12 }} />
+                    <Copyright sx={{ mt: 6 }} />
                 </Box>
             </Box>
         </ThemeProvider >
