@@ -23,7 +23,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {getUserProfile} from '../services/auth';
 import moment from "moment";
-import {getStreamSignedToken} from "../services/stream";
+import {getStreamSignedToken, getStreamURLWithToken} from "../services/stream";
 
 const theme = createTheme({
     palette: {
@@ -95,6 +95,8 @@ export default function Video() {
         getStreamSignedToken(day).then((data) => {
             setToken(data.result.token);
         });
+
+        // getStreamURLWithToken("sd");
     }, [paymentStatus, day])
 
     const [daysFromPayment, setDaysFromPayment] = React.useState(1);

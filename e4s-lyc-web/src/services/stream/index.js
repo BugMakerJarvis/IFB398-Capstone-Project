@@ -1,5 +1,7 @@
 import {getCloudflareConfig} from "../../config/cloudflare-config";
 import {getVideoCardConfig} from "../../config/video-config";
+import firebase from "firebase/compat/app";
+import {getAuth} from "firebase/auth";
 
 const cloudflareConfig = getCloudflareConfig();
 
@@ -27,3 +29,13 @@ export async function getStreamSignedToken(index) {
         console.log("An error occurred when getting the stream's signed token.", e);
     }
 }
+
+// export async function getStreamURLWithToken(name) {
+//     let token = null;
+//     await getAuth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+//         token = idToken;
+//     }).catch(function(e) {
+//         console.log("An error occurred when getting the firebase id token.", e);
+//     });
+//     console.log(token);
+// }
