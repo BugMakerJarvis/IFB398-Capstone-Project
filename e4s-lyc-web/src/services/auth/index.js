@@ -18,7 +18,7 @@ import {collection, getFirestore, query, where, getDocs, doc, setDoc, updateDoc,
 export async function signInWithGoogle() {
     // Sign in Firebase using popup auth and Google as the identity provider.
 
-    await setPersistence(getAuth(), inMemoryPersistence)
+    await setPersistence(getAuth(), browserSessionPersistence)
         .then(() => {
             // In memory persistence will be applied to the signed in Google user
             // even though the persistence was set to 'none' and a page redirect
