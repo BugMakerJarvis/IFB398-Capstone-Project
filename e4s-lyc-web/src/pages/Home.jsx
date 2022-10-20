@@ -24,7 +24,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserProfile } from "../services/auth";
-const stripePromise = loadStripe('pk_test_51LWDmVBgowzUydLpDnmdTTL2w9cYZ3O3w7U8XlwEAoWCOTiD3JcfjbXYlap2UgGaB3dMDVLi8U8rdqp0Y4sza4gG00B0JdbUss');
+const stripePromise = loadStripe('pk_live_51KNqYUFiQAKzaMbBzVDQEzryS9kqIWMhzjuJECtCqeFue0DNwPKmm7i8Y6q3Amwkt24yuzRrvido8n5WDOKHQuKF00EFnBWP3Z');
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -98,7 +98,7 @@ const handleClick = async (event) => {
   const stripe = await stripePromise;
   const { error } = await stripe.redirectToCheckout({
     lineItems: [{
-      price: 'price_1LcLNHBgowzUydLpUxIuLXu3', // Replace with the ID of your price
+      price: 'price_1LuvHfFiQAKzaMbBRFwbgL0L', // Replace with the ID of your price
       quantity: 1,
     }],
     mode: 'payment',
