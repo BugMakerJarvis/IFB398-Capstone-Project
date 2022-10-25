@@ -24,6 +24,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {getUserProfile} from '../services/auth';
 import moment from "moment";
 import {getStreamSignedToken, getStreamURLWithToken} from "../services/stream";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const theme = createTheme({
     palette: {
@@ -52,6 +53,8 @@ export default function Video() {
 
     const [token, setToken] = React.useState("");
 
+    const [isLoading, setIsLoading] = React.useState(true);
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -69,6 +72,7 @@ export default function Video() {
     const paymentStatus = searchParams.get("pay");
 
     useEffect(() => {
+        setIsLoading(true);
         if (paymentStatus === 'success') {
 
         } else if (paymentStatus === 'fail') {
@@ -94,7 +98,7 @@ export default function Video() {
         // get token
         getStreamSignedToken(day).then((data) => {
             setToken(data.result.token);
-        });
+        }).then(() => setIsLoading(false));
 
         // getStreamURLWithToken("sd");
     }, [paymentStatus, day])
@@ -143,7 +147,8 @@ export default function Video() {
                     pb: 6,
                     mt: 5,
                     display: 'flex',
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    verticalAlign: "middle"
                 }}
             >
                 <Card
@@ -154,16 +159,18 @@ export default function Video() {
                         borderColor: '#52BD66'
                     }}
                 >
-                    <CardMedia
-                        width="960"
-                        height="540"
-                        component="iframe"
-                        autoPlay
-                        controls
-                        allowFullScreen
-                        // src={videoConfig[day - 1].videoLink}
-                        src={`https://customer-8bro4htdkojvgl0i.cloudflarestream.com/${token}/iframe`}
-                    />
+                    {isLoading ?
+                        <Typography fontSize="xx-large" color="primary" sx={{mt: 30}}><RefreshIcon color="primary" fontSize="large"/> Loading...</Typography> :
+                        <CardMedia
+                            width="960"
+                            height="540"
+                            component="iframe"
+                            autoPlay
+                            controls
+                            allowFullScreen
+                            // src={videoConfig[day - 1].videoLink}
+                            src={`https://customer-8bro4htdkojvgl0i.cloudflarestream.com/${token}/iframe`}
+                        />}
                 </Card>
                 <List
                     aria-label="main videolist folders"
