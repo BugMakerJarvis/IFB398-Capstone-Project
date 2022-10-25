@@ -98,7 +98,7 @@ const handleClick = async (event) => {
   const stripe = await stripePromise;
   const { error } = await stripe.redirectToCheckout({
     lineItems: [{
-      price: 'price_1LuvHfFiQAKzaMbBRFwbgL0L', // Replace with the ID of your price
+      price: 'price_1LwhNfFiQAKzaMbBeMbTshHL', // Replace with the ID of your price
       quantity: 1,
     }],
     mode: 'payment',
